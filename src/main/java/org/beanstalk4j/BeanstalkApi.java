@@ -12,6 +12,7 @@ import org.beanstalk4j.http.HttpConnection;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Errors;
 import org.beanstalk4j.model.Plan;
+import org.beanstalk4j.model.User;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -74,6 +75,37 @@ public class BeanstalkApi {
 		URI uri = httpConnection.createURI("/api/plans.xml");
 		InputStream httpStream = httpConnection.doGet(uri);
 		return resourceFactory.buildPlans(httpStream);
+	}
+	
+	/**
+	 * Find all users
+	 * @return all users
+	 */
+	public List<User> getUsers() {
+		URI uri = httpConnection.createURI("/api/users.xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildUsers(httpStream);
+	}
+	
+	/**
+	 * Find a single user
+	 * @param userId
+	 * @return single user
+	 */
+	public User getUser(Integer userId) {
+		URI uri = httpConnection.createURI("/api/users/" + userId + ".xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildUser(httpStream);
+	}
+	
+	/**
+	 * Find user for current session
+	 * @return currently logged in user
+	 */
+	public User getCurrentUser() {
+		URI uri = httpConnection.createURI("/api/users/current.xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildUser(httpStream);
 	}
 	
 	/**

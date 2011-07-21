@@ -9,9 +9,11 @@ import java.util.List;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Errors;
 import org.beanstalk4j.model.Plan;
+import org.beanstalk4j.model.User;
 import org.beanstalk4j.model.builder.AccountBuilder;
 import org.beanstalk4j.model.builder.ErrorsBuilder;
 import org.beanstalk4j.model.builder.PlanBuilder;
+import org.beanstalk4j.model.builder.UserBuilder;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -77,6 +79,24 @@ public class ResourceFactory {
 			resultList.add(plan);
 		}
 		return resultList;
+	}
+
+	public List<User> buildUsers(InputStream httpStream) {
+		List<User> resultList = new ArrayList<User>();
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
+			Element e = (Element) it.next();
+			User user = new UserBuilder(e).build();
+			resultList.add(user);
+		}
+		return resultList;
+	}
+
+	public User buildUser(InputStream httpStream) {
+		Document document = buildDocument(httpStream);
+		Element account = document.getRootElement();
+		return new UserBuilder(account).build();
 	}
 	
 
