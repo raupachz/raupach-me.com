@@ -2,11 +2,16 @@ package org.beanstalk4j.factory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Errors;
+import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.builder.AccountBuilder;
 import org.beanstalk4j.model.builder.ErrorsBuilder;
+import org.beanstalk4j.model.builder.PlanBuilder;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -61,5 +66,18 @@ public class ResourceFactory {
 		Element account = document.getRootElement();
 		return new AccountBuilder(account).build();
 	}
+
+	public List<Plan> buildPlans(InputStream httpStream) {
+		List<Plan> resultList = new ArrayList<Plan>();
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
+			Element e = (Element) it.next();
+			Plan plan = new PlanBuilder(e).build();
+			resultList.add(plan);
+		}
+		return resultList;
+	}
+	
 
 }

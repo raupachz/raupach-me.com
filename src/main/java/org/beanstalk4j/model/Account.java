@@ -146,7 +146,6 @@ public class Account implements Serializable {
 		   }
 		   Account aAccount = (Account) obj;
 		   return new EqualsBuilder()
-		                 .appendSuper(super.equals(obj))
 		                 .append(getId(), aAccount.getId())
 		                 .append(getOwnerId(), aAccount.getOwnerId())
 		                 .append(getPlanId(), aAccount.getPlanId())

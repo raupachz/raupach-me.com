@@ -1,0 +1,136 @@
+package org.beanstalk4j.model;
+
+import java.io.Serializable;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+/*
+ * Copyright 2011 Björn Raupach
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+public class Plan implements Serializable {
+	
+	private Integer id;
+	private String name;
+	private Integer price;
+	private Integer repositories;
+	private Integer storage;
+	private Integer users;
+	private Integer servers;
+	
+	public Integer getId() {
+		return id;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public Integer getPrice() {
+		return price;
+	}
+	
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+	
+	public Integer getRepositories() {
+		return repositories;
+	}
+	
+	public void setRepositories(Integer repositories) {
+		this.repositories = repositories;
+	}
+	
+	public Integer getStorage() {
+		return storage;
+	}
+	
+	public void setStorage(Integer storage) {
+		this.storage = storage;
+	}
+	
+	public Integer getUsers() {
+		return users;
+	}
+	
+	public void setUsers(Integer users) {
+		this.users = users;
+	}
+	
+	public Integer getServers() {
+		return servers;
+	}
+	
+	public void setServers(Integer servers) {
+		this.servers = servers;
+	}
+	
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+			.append("id", getId())
+			.append("name", getName())
+			.append("price", getPrice())
+			.append("repositories", getRepositories())
+			.append("storage", getStorage())
+			.append("users", getUsers())
+			.append("servers", getServers())
+			.toString();
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(51, 11)
+			.append(getId())
+			.append(getName())
+			.append(getPrice())
+			.append(getRepositories())
+			.append(getStorage())
+			.append(getUsers())
+			.append(getServers())
+			.toHashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Account == false) {
+		     return false;
+		   }
+		   if (this == obj) {
+		     return true;
+		   }
+		   Plan aPlan = (Plan) obj;
+		   return new EqualsBuilder()
+		                 .append(getId(), aPlan.getId())
+		                 .append(getName(), aPlan.getName())
+		                 .append(getPrice(), aPlan.getPrice())
+		                 .append(getRepositories(), aPlan.getRepositories())
+		                 .append(getStorage(), aPlan.getStorage())
+		                 .append(getUsers(), aPlan.getUsers())
+		                 .append(getServers(), aPlan.getServers())
+		                 .isEquals();
+	}
+	
+}

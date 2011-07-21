@@ -2,6 +2,7 @@ package org.beanstalk4j;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,6 +11,7 @@ import org.beanstalk4j.factory.ResourceFactory;
 import org.beanstalk4j.http.HttpConnection;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Errors;
+import org.beanstalk4j.model.Plan;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -62,6 +64,16 @@ public class BeanstalkApi {
 		
 		InputStream in = httpConnection.doPut(uri, sb.toString());
 		handleErrors(in);
+	}
+	
+	/**
+	 * Find all plans
+	 * @return all plans
+	 */
+	public List<Plan> getPlans() {
+		URI uri = httpConnection.createURI("/api/plans.xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildPlans(httpStream);
 	}
 	
 	/**
