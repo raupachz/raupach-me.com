@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.beanstalk4j.model.Account;
+import org.beanstalk4j.model.Errors;
 import org.beanstalk4j.model.builder.AccountBuilder;
+import org.beanstalk4j.model.builder.ErrorsBuilder;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -46,6 +48,12 @@ public class ResourceFactory {
 			}
 		}
 		return document;
+	}
+	
+	public Errors buildError(InputStream httpStream) {
+		Document document = buildDocument(httpStream);
+		Element errors = document.getRootElement();
+		return new ErrorsBuilder(errors).build();
 	}
 
 	public Account buildAccount(InputStream httpStream) {

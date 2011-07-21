@@ -3,9 +3,13 @@ package org.beanstalk4j;
 import java.io.InputStream;
 import java.net.URI;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.beanstalk4j.exception.UpdateException;
 import org.beanstalk4j.factory.ResourceFactory;
 import org.beanstalk4j.http.HttpConnection;
 import org.beanstalk4j.model.Account;
+import org.beanstalk4j.model.Errors;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -42,11 +46,36 @@ public class BeanstalkApi {
 		return resourceFactory.buildAccount(httpStream);
 	}
 	
+	public void updateAccount(String name, String timeZone) {
+		URI uri = httpConnection.createURI("/api/account.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		sb.append("<account>");
+		if (name != null) {
+			sb.append("<name>").append(name).append("</name>");
+		}
+		if (timeZone != null) {
+			sb.append("<time-zone>").append(timeZone).append("</time-zone>");
+		}
+		sb.append("</account>");
+		
+		InputStream in = httpConnection.doPut(uri, sb.toString());
+		handleErrors(in);
+	}
+	
 	/**
 	 * Releases resources.
 	 */
 	public void dispose() {
 		httpConnection.close();
+	}
+	
+	private void handleErrors(InputStream httpStream) {
+		if (httpStream != null) {
+			Errors errors = resourceFactory.buildError(httpStream);
+			throw new UpdateException(errors);
+		}
 	}
 
 }

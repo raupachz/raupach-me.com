@@ -106,20 +106,22 @@ public class HttpConnection {
 		doMethod(httppost);
 	}
 	
-	public void doPut(URI uri, String request) {
+	public InputStream doPut(URI uri, String request) {
+		InputStream in = null;
 		try {
 			StringEntity entity = new StringEntity(request, "UTF-8");
 			HttpPut httpput = new HttpPut(uri);
 			httpput.setEntity(entity);
-			doMethod(httpput);
+			in =  doMethod(httpput, false);
 		} catch (UnsupportedEncodingException e) {
 			onCaughtException(e);
 		}
+		return in;
 	}
 	
-	public void doPut(URI uri) {
+	public InputStream doPut(URI uri) {
 		HttpPut httpput = new HttpPut(uri);
-		doMethod(httpput);
+		return doMethod(httpput, false);
 	}
 	
 	public void doDelete(URI uri) {
@@ -163,8 +165,7 @@ public class HttpConnection {
 	
 	private boolean hasInvalidStatusCode(HttpResponse response) {
 		StatusLine statusLine = response.getStatusLine();
-		return statusLine.getStatusCode() != HttpStatus.SC_OK 
-				&& statusLine.getStatusCode() != HttpStatus.SC_CREATED;
+		return statusLine.getStatusCode() != HttpStatus.SC_OK;
 	}
 	
 	private void raiseIllegalState(HttpResponse response) {
