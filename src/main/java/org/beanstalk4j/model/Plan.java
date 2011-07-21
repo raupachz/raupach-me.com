@@ -116,21 +116,19 @@ public class Plan implements Serializable {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Account == false) {
-		     return false;
-		   }
-		   if (this == obj) {
-		     return true;
-		   }
-		   Plan aPlan = (Plan) obj;
-		   return new EqualsBuilder()
-		                 .append(getId(), aPlan.getId())
-		                 .append(getName(), aPlan.getName())
-		                 .append(getPrice(), aPlan.getPrice())
-		                 .append(getRepositories(), aPlan.getRepositories())
-		                 .append(getStorage(), aPlan.getStorage())
-		                 .append(getUsers(), aPlan.getUsers())
-		                 .append(getServers(), aPlan.getServers())
-		                 .isEquals();
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
+		Plan aPlan = (Plan) obj;
+		return new EqualsBuilder().append(getId(), aPlan.getId())
+				.append(getName(), aPlan.getName())
+				.append(getPrice(), aPlan.getPrice())
+				.append(getRepositories(), aPlan.getRepositories())
+				.append(getStorage(), aPlan.getStorage())
+				.append(getUsers(), aPlan.getUsers())
+				.append(getServers(), aPlan.getServers()).isEquals();
 	}
 	
 }
