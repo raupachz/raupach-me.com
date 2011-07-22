@@ -90,15 +90,17 @@ public class HttpConnection {
 		return doMethod(httpget, false);
 	}
 	
-	public void doPost(URI uri, String request) {
+	public InputStream doPost(URI uri, String request) {
+		InputStream in = null;
 		try {
 			StringEntity entity = new StringEntity(request, "UTF-8");
 			HttpPost httppost = new HttpPost(uri);
 			httppost.setEntity(entity);
-			doMethod(httppost);
+			in = doMethod(httppost, false);
 		} catch (UnsupportedEncodingException e) {
 			onCaughtException(e);
 		} 
+		return in;
 	}
 	
 	public void doPost(URI uri) {

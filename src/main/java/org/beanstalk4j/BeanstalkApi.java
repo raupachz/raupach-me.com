@@ -111,19 +111,20 @@ public class BeanstalkApi {
 	 * Create new User
 	 * @param user
 	 */
-	public void createUser(User user, String password) {
+	public User createUser(User user, String password) {
 		URI uri = httpConnection.createURI("/api/users.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<user>");
 		sb.append("<login>").append(user.getLogin()).append("</login>");
 		sb.append("<email>").append(user.getEmail()).append("</email>");
-		sb.append("<first_name>").append(user.getFirstName()).append("</first_name>");
-		sb.append("<last_name>").append(user.getLastName()).append("</last_name>");
+		sb.append("<first-name>").append(user.getFirstName()).append("</first-name>");
+		sb.append("<last-name>").append(user.getLastName()).append("</last-name>");
 		sb.append("<password>").append(password).append("</password>");
 		sb.append("</user>");
 
-		httpConnection.doPost(uri, sb.toString());
+		InputStream httpStream = httpConnection.doPost(uri, sb.toString());
+		return resourceFactory.buildUser(httpStream);
 	}
 	 
 	public void updateUser(User user) {
