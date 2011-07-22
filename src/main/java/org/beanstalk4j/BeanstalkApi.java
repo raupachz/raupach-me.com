@@ -107,6 +107,25 @@ public class BeanstalkApi {
 		return resourceFactory.buildUser(httpStream);
 	}
 	
+	/**
+	 * Create new User
+	 * @param user
+	 */
+	public void createUser(User user, String password) {
+		URI uri = httpConnection.createURI("/api/users.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<user>");
+		sb.append("<login>").append(user.getLogin()).append("</login>");
+		sb.append("<email>").append(user.getEmail()).append("</email>");
+		sb.append("<first_name>").append(user.getFirstName()).append("</first_name>");
+		sb.append("<last_name>").append(user.getLastName()).append("</last_name>");
+		sb.append("<password>").append(password).append("</password>");
+		sb.append("</user>");
+
+		httpConnection.doPost(uri, sb.toString());
+	}
+	 
 	public void updateUser(User user) {
 		URI uri = httpConnection.createURI("/api/users/" + user.getId() + ".xml");
 		
@@ -119,6 +138,15 @@ public class BeanstalkApi {
 		sb.append("</user>");
 		
 		httpConnection.doPut(uri, sb.toString());
+	}
+	
+	/**
+	 * Delete user. You can not delete account owner.
+	 * @param user
+	 */
+	public void deleteUser(User user) {
+		URI uri = httpConnection.createURI("/api/users/" + user.getId() + ".xml");
+		httpConnection.doDelete(uri);
 	}
 	
 	/**

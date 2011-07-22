@@ -165,7 +165,8 @@ public class HttpConnection {
 	
 	private boolean hasInvalidStatusCode(HttpResponse response) {
 		StatusLine statusLine = response.getStatusLine();
-		return statusLine.getStatusCode() != HttpStatus.SC_OK;
+		int statusCode = statusLine.getStatusCode();
+		return !(statusCode == HttpStatus.SC_OK || statusCode == HttpStatus.SC_CREATED);
 	}
 	
 	private void raiseIllegalState(HttpResponse response) {
