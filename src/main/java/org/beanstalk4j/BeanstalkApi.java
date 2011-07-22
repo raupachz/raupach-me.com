@@ -12,6 +12,7 @@ import org.beanstalk4j.http.HttpConnection;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Errors;
 import org.beanstalk4j.model.Plan;
+import org.beanstalk4j.model.PublicKey;
 import org.beanstalk4j.model.User;
 
 /*
@@ -53,7 +54,6 @@ public class BeanstalkApi {
 		URI uri = httpConnection.createURI("/api/account.xml");
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		sb.append("<account>");
 		if (name != null) {
 			sb.append("<name>").append(name).append("</name>");
@@ -63,8 +63,7 @@ public class BeanstalkApi {
 		}
 		sb.append("</account>");
 		
-		InputStream in = httpConnection.doPut(uri, sb.toString());
-		handleErrors(in);
+		httpConnection.doPut(uri, sb.toString());
 	}
 	
 	/**
@@ -106,6 +105,30 @@ public class BeanstalkApi {
 		URI uri = httpConnection.createURI("/api/users/current.xml");
 		InputStream httpStream = httpConnection.doGet(uri);
 		return resourceFactory.buildUser(httpStream);
+	}
+	
+	public void updateUser(User user) {
+		URI uri = httpConnection.createURI("/api/users/" + user.getId() + ".xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<user>");
+		sb.append("<login>").append(user.getLogin()).append("</login>");
+		sb.append("<email>").append(user.getEmail()).append("</email>");
+		sb.append("<first-name>").append(user.getFirstName()).append("<first-name>");
+		sb.append("<last-name>").append(user.getLastName()).append("<last-name>");
+		sb.append("</user>");
+		
+		httpConnection.doPut(uri, sb.toString());
+	}
+	
+	/**
+	 * Finds current user's public keys
+	 * @return current user's public keys
+	 */
+	public List<PublicKey> getPublicKeys() {
+		URI uri = httpConnection.createURI("/api/public_keys.xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildPublicKeys(httpStream);
 	}
 	
 	/**

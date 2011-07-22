@@ -112,7 +112,7 @@ public class HttpConnection {
 			StringEntity entity = new StringEntity(request, "UTF-8");
 			HttpPut httpput = new HttpPut(uri);
 			httpput.setEntity(entity);
-			in =  doMethod(httpput, false);
+			in =  doMethod(httpput, true);
 		} catch (UnsupportedEncodingException e) {
 			onCaughtException(e);
 		}
