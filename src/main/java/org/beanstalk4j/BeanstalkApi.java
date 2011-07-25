@@ -161,17 +161,81 @@ public class BeanstalkApi {
 	}
 	
 	/**
+	 * Find a single public key
+	 * @return public key
+	 */
+	public PublicKey getPublicKey(Integer id) {
+		URI uri = httpConnection.createURI("/api/public_keys/" + id + ".xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildPublicKey(httpStream);
+	}
+	
+	/**
+	 * Create a new public key for the current user
+	 * @param content 
+	 * @return created public key
+	 */
+	public PublicKey createPublicKey(String content) {
+		URI uri = httpConnection.createURI("/api/public_keys.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<public-key>");
+		sb.append("<content>").append(content).append("</content>");
+		sb.append("</public-key>");
+		
+		InputStream httpStream = httpConnection.doPost(uri, sb.toString());
+		return resourceFactory.buildPublicKey(httpStream);
+	}
+	
+	/**
+	 * Create a new public key
+	 * @param userId 
+	 * @param content
+	 * @return created public key
+	 */
+	public PublicKey createPublicKey(Integer userId, String content) {
+		URI uri = httpConnection.createURI("/api/public_keys.xml?user_id=" + userId);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<public-key>");
+		sb.append("<content>").append(content).append("</content>");
+		sb.append("</public-key>");
+		
+		InputStream httpStream = httpConnection.doPost(uri, sb.toString());
+		return resourceFactory.buildPublicKey(httpStream);
+	}
+	
+	/**
+	 * Update an existing public key
+	 * @param publicKey
+	 */
+	public void updatePublicKey(PublicKey publicKey) {
+		URI uri = httpConnection.createURI("/api/public_keys/" + publicKey.getId() + ".xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<public-key>");
+		if (publicKey.getName() != null) {
+			sb.append("<name>").append(publicKey.getName()).append("</name>");
+		}
+		sb.append("<content>").append(publicKey.getContent()).append("</content>");
+		sb.append("</public-key>");
+		
+		httpConnection.doPut(uri, sb.toString());
+	}
+	
+	/**
+	 * Delete public Key
+	 */
+	public void deletePublicKey(PublicKey publicKey) {
+		URI uri = httpConnection.createURI("/api/public_keys/" + publicKey.getId() + ".xml");
+		httpConnection.doDelete(uri);
+	}
+	
+	/**
 	 * Releases resources.
 	 */
 	public void dispose() {
 		httpConnection.close();
 	}
 	
-	private void handleErrors(InputStream httpStream) {
-		if (httpStream != null) {
-			Errors errors = resourceFactory.buildError(httpStream);
-			throw new UpdateException(errors);
-		}
-	}
-
 }

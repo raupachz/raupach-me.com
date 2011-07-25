@@ -112,6 +112,12 @@ public class ResourceFactory {
 		}
 		return resultList;
 	}
+
+	public PublicKey buildPublicKey(InputStream httpStream) {
+		Document document = buildDocument(httpStream);
+		Element account = document.getRootElement();
+		return new PublicKeyBuilder(account).build();
+	}
 	
 
 }
