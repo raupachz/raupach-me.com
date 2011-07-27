@@ -115,7 +115,7 @@ public class Plan implements Serializable {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Account == false) {
+		if (obj instanceof Plan == false) {
 			return false;
 		}
 		if (this == obj) {

@@ -160,7 +160,7 @@ public class User implements Serializable {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Account == false) {
+		if (obj instanceof User == false) {
 			return false;
 		}
 		if (this == obj) {
