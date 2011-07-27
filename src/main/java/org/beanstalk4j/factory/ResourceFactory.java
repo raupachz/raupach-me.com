@@ -10,11 +10,13 @@ import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Errors;
 import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.PublicKey;
+import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.User;
 import org.beanstalk4j.model.builder.AccountBuilder;
 import org.beanstalk4j.model.builder.ErrorsBuilder;
 import org.beanstalk4j.model.builder.PlanBuilder;
 import org.beanstalk4j.model.builder.PublicKeyBuilder;
+import org.beanstalk4j.model.builder.RepositoryBuilder;
 import org.beanstalk4j.model.builder.UserBuilder;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -117,6 +119,24 @@ public class ResourceFactory {
 		Document document = buildDocument(httpStream);
 		Element account = document.getRootElement();
 		return new PublicKeyBuilder(account).build();
+	}
+
+	public List<Repository> buildRepositories(InputStream httpStream) {
+		List<Repository> resultList = new ArrayList<Repository>();
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext(); ) {
+			Element e = (Element) it.next();
+			Repository repository = new RepositoryBuilder(e).build();
+			resultList.add(repository);
+		}
+		return resultList;
+	}
+
+	public Repository buildRepository(InputStream httpStream) {
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		return new RepositoryBuilder(root).build();
 	}
 	
 

@@ -31,7 +31,7 @@ public class Repository implements Serializable {
 	private String type;
 	private String name;
 	private Integer revision;
-	private Integer storageBytes;
+	private Integer storageUsedBytes;
 	private String title;
 	private Date lastCommitAt;
 	private Date updatedAt;
@@ -93,12 +93,12 @@ public class Repository implements Serializable {
 		this.revision = revision;
 	}
 	
-	public Integer getStorageBytes() {
-		return storageBytes;
+	public Integer getStorageUsedBytes() {
+		return storageUsedBytes;
 	}
 	
-	public void setStorageBytes(Integer storageBytes) {
-		this.storageBytes = storageBytes;
+	public void setStorageUsedBytes(Integer storageUsedBytes) {
+		this.storageUsedBytes = storageUsedBytes;
 	}
 	
 	public String getTitle() {
@@ -143,7 +143,7 @@ public class Repository implements Serializable {
 			.append("type", getType())
 			.append("name", getName())
 			.append("revision", getRevision())
-			.append("storageBytes", getStorageBytes())
+			.append("storageBytes", getStorageUsedBytes())
 			.append("title", getTitle())
 			.append("lastCommitAt", getLastCommitAt())
 			.append("updatedAt", getUpdatedAt())
@@ -161,7 +161,7 @@ public class Repository implements Serializable {
 			.append(getType())
 			.append(getName())
 			.append(getRevision())
-			.append(getStorageBytes())
+			.append(getStorageUsedBytes())
 			.append(getTitle())
 			.append(getLastCommitAt())
 			.append(getUpdatedAt())
@@ -186,7 +186,7 @@ public class Repository implements Serializable {
 			.append(getType(), aRepository.getType())
 			.append(getName(), aRepository.getName())
 			.append(getRevision(), aRepository.getRevision())
-			.append(getStorageBytes(), aRepository.getStorageBytes())
+			.append(getStorageUsedBytes(), aRepository.getStorageUsedBytes())
 			.append(getTitle(), aRepository.getTitle())
 			.append(getLastCommitAt(), aRepository.getLastCommitAt())
 			.append(getUpdatedAt(), aRepository.getUpdatedAt())

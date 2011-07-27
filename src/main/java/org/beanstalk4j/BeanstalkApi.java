@@ -13,6 +13,7 @@ import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Errors;
 import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.PublicKey;
+import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.User;
 
 /*
@@ -230,6 +231,58 @@ public class BeanstalkApi {
 		URI uri = httpConnection.createURI("/api/public_keys/" + publicKey.getId() + ".xml");
 		httpConnection.doDelete(uri);
 	}
+	
+	/**
+	 * Find all repositories
+	 * @return all repositories
+	 */
+	public List<Repository> getRepositories() {
+		URI uri = httpConnection.createURI("/api/repositories.xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildRepositories(httpStream);
+	}
+	
+	/**
+	 * Find a single repository by Id
+	 * @param repositoryId
+	 * @return repository
+	 */
+	public Repository getRepository(Integer repositoryId) {
+		URI uri = httpConnection.createURI("/api/repositories/" + repositoryId + ".xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildRepository(httpStream);
+	}
+	
+	/**
+	 * Find a single repository by Name, don't confuse with title
+	 * @param name
+	 * @return repository
+	 */
+	public Repository getRepository(String name) {
+		URI uri = httpConnection.createURI("/api/repositories/" + name + ".xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildRepository(httpStream);
+	}
+	
+	/**
+	 * Create a rew repository
+	 * @param name must be unique
+	 * @param title must be unique
+	 * @return
+	 */
+	public Repository createRepository(String name, String title) {
+		URI uri = httpConnection.createURI("/api/repositories.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<repository>");
+		sb.append("<name>").append(name).append("</name>");
+		sb.append("<title>").append(title).append("</title>");
+		sb.append("</repository>");
+		
+		InputStream httpStream = httpConnection.doPost(uri, sb.toString());
+		return resourceFactory.buildRepository(httpStream);
+	}
+
 	
 	/**
 	 * Releases resources.
