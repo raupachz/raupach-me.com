@@ -2,7 +2,6 @@ package org.beanstalk4j.model;
 
 import java.io.Serializable;
 
-
 /*
  * Copyright 2011 Björn Raupach
 

@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.beanstalk4j</groupId>
   <artifactId>beanstalk4j</artifactId>
-  <version>0.9-SNAPSHOT</version>
+  <version>0.9.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>beanstalk4j</name>
   <url>http://www.beanstalk4j.org</url>

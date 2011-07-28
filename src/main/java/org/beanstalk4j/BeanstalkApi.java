@@ -354,7 +354,7 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public Changeset getChangeset(String name, Integer revision) {
-		URI uri = httpConnection.createURI("/api/changesets/" + revision + ".xml?repository_id=" + repositoryId);
+		URI uri = httpConnection.createURI("/api/changesets/" + revision + ".xml?repository_id=" + revision);
 		InputStream httpStream = httpConnection.doGet(uri);
 		return resourceFactory.buildChangeset(httpStream);
 	}
