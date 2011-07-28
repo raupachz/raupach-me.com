@@ -10,7 +10,9 @@ import org.beanstalk4j.exception.UpdateException;
 import org.beanstalk4j.factory.ResourceFactory;
 import org.beanstalk4j.http.HttpConnection;
 import org.beanstalk4j.model.Account;
+import org.beanstalk4j.model.Changeset;
 import org.beanstalk4j.model.Errors;
+import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.PublicKey;
 import org.beanstalk4j.model.Repository;
@@ -281,6 +283,80 @@ public class BeanstalkApi {
 		
 		InputStream httpStream = httpConnection.doPost(uri, sb.toString());
 		return resourceFactory.buildRepository(httpStream);
+	}
+	
+	/**
+	 * Find permissions for user
+	 */
+	public List<Permission> getPermissions(Integer userId) {
+		URI uri = httpConnection.createURI("/api/permissions/" + userId + ".xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildPermissions(httpStream);
+	}
+	
+	/**
+	 * Strip user of permission
+	 * @param permission
+	 */
+	public void deletePermission(Permission permission) {
+		URI uri = httpConnection.createURI("/api/permissions/" + permission.getId() + ".xml");
+		httpConnection.doDelete(uri);
+	}
+	
+	/**
+	 * Find alle changesets
+	 * @return last 15 changesets from all repositories
+	 */
+	public List<Changeset> getChangesets() {
+		URI uri = httpConnection.createURI("/api/changesets.xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildChangesets(httpStream);
+	}
+	
+	/**
+	 * Find all changesets for a specific repository
+	 * @param repositoryId
+	 * @return
+	 */
+	public List<Changeset> getChangesets(Integer repositoryId) {
+		URI uri = httpConnection.createURI("/api/changesets/repository.xml?repository_id=" + repositoryId);
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildChangesets(httpStream);
+	}
+	
+	/**
+	 * Finds all changesets for a specific repository
+	 * @param name of the repository
+	 * @return
+	 */
+	public List<Changeset> getChangesets(String name) {
+		URI uri = httpConnection.createURI("/api/changesets/repository.xml?repository_id=" + name);
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildChangesets(httpStream);
+	}
+	
+	/**
+	 * Find a single changeset
+	 * @param repositoryId
+	 * @param revision
+	 * @return
+	 */
+	public Changeset getChangeset(Integer repositoryId, Integer revision) {
+		URI uri = httpConnection.createURI("/api/changesets/" + revision + ".xml?repository_id=" + repositoryId);
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildChangeset(httpStream);
+	}
+	
+	/**
+	 * Find a single changeset
+	 * @param repositoryId
+	 * @param name
+	 * @return
+	 */
+	public Changeset getChangeset(String name, Integer revision) {
+		URI uri = httpConnection.createURI("/api/changesets/" + revision + ".xml?repository_id=" + repositoryId);
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildChangeset(httpStream);
 	}
 
 	

@@ -7,13 +7,17 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.beanstalk4j.model.Account;
+import org.beanstalk4j.model.Changeset;
 import org.beanstalk4j.model.Errors;
+import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.PublicKey;
 import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.User;
 import org.beanstalk4j.model.builder.AccountBuilder;
+import org.beanstalk4j.model.builder.ChangesetBuilder;
 import org.beanstalk4j.model.builder.ErrorsBuilder;
+import org.beanstalk4j.model.builder.PermissionBuilder;
 import org.beanstalk4j.model.builder.PlanBuilder;
 import org.beanstalk4j.model.builder.PublicKeyBuilder;
 import org.beanstalk4j.model.builder.RepositoryBuilder;
@@ -138,6 +142,35 @@ public class ResourceFactory {
 		Element root = document.getRootElement();
 		return new RepositoryBuilder(root).build();
 	}
-	
+
+	public List<Permission> buildPermissions(InputStream httpStream) {
+		List<Permission> resultList = new ArrayList<Permission>();
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext(); ) {
+			Element e = (Element) it.next();
+			Permission permission = new PermissionBuilder(e).build();
+			resultList.add(permission);
+		}
+		return resultList;
+	}
+
+	public List<Changeset> buildChangesets(InputStream httpStream) {
+		List<Changeset> resultList = new ArrayList<Changeset>();
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext(); ) {
+			Element e = (Element) it.next();
+			Changeset changeset = new ChangesetBuilder(e).build();
+			resultList.add(changeset);
+		}
+		return resultList;
+	}
+
+	public Changeset buildChangeset(InputStream httpStream) {
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		return new ChangesetBuilder(root).build();	
+	}
 
 }
