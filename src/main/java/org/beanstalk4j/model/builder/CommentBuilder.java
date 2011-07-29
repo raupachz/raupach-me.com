@@ -108,13 +108,9 @@ public class CommentBuilder {
 		return this;
 	}
 	
-	public CommentBuilder lineNumber(Integer lineNumber) {
+	public CommentBuilder lineNumber(String lineNumber) {
 		comment.setLineNumber(lineNumber);
 		return this;
-	}
-	
-	public CommentBuilder lineNumber(String lineNumber) {
-		return lineNumber(Integer.valueOf(lineNumber));
 	}
 	
 	public CommentBuilder renderedBody(String renderedBody) {

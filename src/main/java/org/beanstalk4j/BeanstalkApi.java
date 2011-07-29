@@ -11,6 +11,7 @@ import org.beanstalk4j.factory.ResourceFactory;
 import org.beanstalk4j.http.HttpConnection;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
+import org.beanstalk4j.model.Comment;
 import org.beanstalk4j.model.Errors;
 import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
@@ -357,6 +358,28 @@ public class BeanstalkApi {
 		URI uri = httpConnection.createURI("/api/changesets/" + revision + ".xml?repository_id=" + revision);
 		InputStream httpStream = httpConnection.doGet(uri);
 		return resourceFactory.buildChangeset(httpStream);
+	}
+	
+	/**
+	 * Find all comments for a repository
+	 * @param repositoryId Id of a repository
+	 * @return all comments
+	 */
+	public List<Comment> getComments(Integer repositoryId) {
+		URI uri = httpConnection.createURI("/api/" + repositoryId + "/comments.xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildComments(httpStream);
+	}
+	
+	/**
+	 * Find all comments for a repository
+	 * @param name Nme of a repository
+	 * @return all comments
+	 */
+	public List<Comment> getComments(String name) {
+		URI uri = httpConnection.createURI("/api/" + name + "/comments.xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return resourceFactory.buildComments(httpStream);
 	}
 
 	

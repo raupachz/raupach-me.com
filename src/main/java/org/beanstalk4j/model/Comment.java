@@ -3,6 +3,8 @@ package org.beanstalk4j.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 /*
  * Copyright 2011 Björn Raupach
 
@@ -29,7 +31,7 @@ public class Comment implements Serializable {
 	private String body;
 	private Date createdAt;
 	private String filePath;
-	private Integer lineNumber;
+	private String lineNumber;
 	private String renderedBody;
 	private Integer repositoryId;
 	private Integer revision;
@@ -107,11 +109,11 @@ public class Comment implements Serializable {
 		this.filePath = filePath;
 	}
 	
-	public Integer getLineNumber() {
+	public String getLineNumber() {
 		return lineNumber;
 	}
 	
-	public void setLineNumber(Integer lineNumber) {
+	public void setLineNumber(String lineNumber) {
 		this.lineNumber = lineNumber;
 	}
 	
@@ -145,5 +147,25 @@ public class Comment implements Serializable {
 	
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+	
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+			.append("id", getId())
+			.append("accountId", getAccountId())
+			.append("authorId", getAuthorId())
+			.append("authorName", getAuthorName())
+			.append("authorLogin", getAuthorLogin())
+			.append("authorEmail", getAuthorEmail())
+			.append("body", getBody())
+			.append("createdAt", getCreatedAt())
+			.append("filePath", getFilePath())
+			.append("lineNumber", getLineNumber())
+			.append("renderedBody", getRenderedBody())
+			.append("repositoryId", getRepositoryId())
+			.append("revision", getRevision())
+			.append("updatedAt", getUpdatedAt())
+			.toString();
 	}
 }

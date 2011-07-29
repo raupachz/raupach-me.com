@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
+import org.beanstalk4j.model.Comment;
 import org.beanstalk4j.model.Errors;
 import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
@@ -16,6 +17,7 @@ import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.User;
 import org.beanstalk4j.model.builder.AccountBuilder;
 import org.beanstalk4j.model.builder.ChangesetBuilder;
+import org.beanstalk4j.model.builder.CommentBuilder;
 import org.beanstalk4j.model.builder.ErrorsBuilder;
 import org.beanstalk4j.model.builder.PermissionBuilder;
 import org.beanstalk4j.model.builder.PlanBuilder;
@@ -171,6 +173,18 @@ public class ResourceFactory {
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		return new ChangesetBuilder(root).build();	
+	}
+
+	public List<Comment> buildComments(InputStream httpStream) {
+		List<Comment> resultList = new ArrayList<Comment>();
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext(); ) {
+			Element e = (Element) it.next();
+			Comment comment = new CommentBuilder(e).build();
+			resultList.add(comment);
+		}
+		return resultList;
 	}
 
 }
