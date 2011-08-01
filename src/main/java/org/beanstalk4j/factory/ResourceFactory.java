@@ -14,6 +14,7 @@ import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.PublicKey;
 import org.beanstalk4j.model.Repository;
+import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.model.User;
 import org.beanstalk4j.model.builder.AccountBuilder;
 import org.beanstalk4j.model.builder.ChangesetBuilder;
@@ -23,6 +24,7 @@ import org.beanstalk4j.model.builder.PermissionBuilder;
 import org.beanstalk4j.model.builder.PlanBuilder;
 import org.beanstalk4j.model.builder.PublicKeyBuilder;
 import org.beanstalk4j.model.builder.RepositoryBuilder;
+import org.beanstalk4j.model.builder.ServerEnvironmentBuilder;
 import org.beanstalk4j.model.builder.UserBuilder;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -185,6 +187,24 @@ public class ResourceFactory {
 			resultList.add(comment);
 		}
 		return resultList;
+	}
+
+	public List<ServerEnvironment> buildServerEnvironments(InputStream httpStream) {
+		List<ServerEnvironment> resultList = new ArrayList<ServerEnvironment>();
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext(); ) {
+			Element e = (Element) it.next();
+			ServerEnvironment serverEnvironment = new ServerEnvironmentBuilder(e).build();
+			resultList.add(serverEnvironment);
+		}
+		return resultList;
+	}
+
+	public ServerEnvironment buildServerEnvironment(InputStream httpStream) {
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		return new ServerEnvironmentBuilder(root).build();	
 	}
 
 }

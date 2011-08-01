@@ -33,8 +33,8 @@ public class ReleaseServerBuilder {
 		this();
 		accountId(element.getChildText("account-id"));
 		createdAt(element.getChildText("created-at"));
-		environmentName(element.getChildText("environment-mame"));
-		id(element.getChildText("id-"));
+		environmentName(element.getChildText("environment-name"));
+		id(element.getChildText("id"));
 		localPath(element.getChildText("local-path"));
 		login(element.getChildText("login"));
 		name(element.getChildText("name"));
