@@ -3,9 +3,7 @@ package org.beanstalk4j.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.beanstalk4j.ToStringBuilder;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -151,48 +149,4 @@ public class Repository implements Serializable {
 			.toString();
 	}
 	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(7, 13)
-			.append(getId())
-			.append(getAccountId())
-			.append(isAnonymous())
-			.append(getColorLabel())
-			.append(getType())
-			.append(getName())
-			.append(getRevision())
-			.append(getStorageUsedBytes())
-			.append(getTitle())
-			.append(getLastCommitAt())
-			.append(getUpdatedAt())
-			.append(getCreatedAt())
-			.toHashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Repository == false) {
-			return false;
-		}
-		if (this == obj) {
-			return true;
-		}
-		Repository aRepository = (Repository) obj;
-		return new EqualsBuilder()
-			.append(getId(), aRepository.getId())
-			.append(getAccountId(), aRepository.getAccountId())
-			.append(isAnonymous(), aRepository.isAnonymous())
-			.append(getColorLabel(), aRepository.getColorLabel())
-			.append(getType(), aRepository.getType())
-			.append(getName(), aRepository.getName())
-			.append(getRevision(), aRepository.getRevision())
-			.append(getStorageUsedBytes(), aRepository.getStorageUsedBytes())
-			.append(getTitle(), aRepository.getTitle())
-			.append(getLastCommitAt(), aRepository.getLastCommitAt())
-			.append(getUpdatedAt(), aRepository.getUpdatedAt())
-			.append(getCreatedAt(), aRepository.getCreatedAt())
-			.isEquals();
-	}
-	
-
 }

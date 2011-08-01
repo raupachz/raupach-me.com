@@ -3,9 +3,7 @@ package org.beanstalk4j.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.beanstalk4j.ToStringBuilder;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -141,45 +139,4 @@ public class User implements Serializable {
 			.toString();
 	}
 	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(11, 53)
-			.append(getId())
-			.append(getAccountId())
-			.append(isAdmin())
-			.append(isOwner())
-			.append(getFirstName())
-			.append(getLastName())
-			.append(getEmail())
-			.append(getLogin())
-			.append(getTimeZone())
-			.append(getCreatedAt())
-			.append(getUpdatedAt())
-			.toHashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof User == false) {
-			return false;
-		}
-		if (this == obj) {
-			return true;
-		}
-		User aUser = (User) obj;
-		return new EqualsBuilder()
-			.append(getId(), aUser.getId())
-			.append(getAccountId(), aUser.getAccountId())
-			.append(isAdmin(), aUser.isAdmin())
-			.append(isOwner(), aUser.isOwner())
-			.append(getFirstName(), aUser.getFirstName())
-			.append(getLastName(), aUser.getLastName())
-			.append(getEmail(), aUser.getEmail())
-			.append(getLogin(), aUser.getLogin())
-			.append(getTimeZone(), aUser.getTimeZone())
-			.append(getCreatedAt(), aUser.getCreatedAt())
-			.append(getUpdatedAt(), aUser.getUpdatedAt())
-			.isEquals();
-	}
-
 }

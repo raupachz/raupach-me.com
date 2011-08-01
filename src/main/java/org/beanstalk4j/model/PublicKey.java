@@ -3,9 +3,7 @@ package org.beanstalk4j.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.beanstalk4j.ToStringBuilder;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -101,36 +99,4 @@ public class PublicKey implements Serializable {
 			.toString();
 	}
 	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(19, 29)
-			.append(getId())
-			.append(getAccountId())
-			.append(getUserId())
-			.append(getName())
-			.append(getContent())
-			.append(getCreatedAt())
-			.append(getUpdatedAt())
-			.toHashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Account == false) {
-			return false;
-		}
-		if (this == obj) {
-			return true;
-		}
-		PublicKey aPublicKey = (PublicKey) obj;
-		return new EqualsBuilder()
-			.append(getId(), aPublicKey.getId())
-			.append(getAccountId(), aPublicKey.getAccountId())
-			.append(getName(), aPublicKey.getName())
-			.append(getContent(), aPublicKey.getContent())
-			.append(getCreatedAt(), aPublicKey.getCreatedAt())
-			.append(getUpdatedAt(), aPublicKey.getUpdatedAt())
-			.isEquals();
-	}
-
 }

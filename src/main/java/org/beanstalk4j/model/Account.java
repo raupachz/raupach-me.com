@@ -3,9 +3,7 @@ package org.beanstalk4j.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.beanstalk4j.ToStringBuilder;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -119,42 +117,6 @@ public class Account implements Serializable {
 			.append("createdAt",getCreatedAt())
 			.append("updatedAt",getUpdatedAt())
 			.toString();
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(31, 41)
-			.append(getId())
-			.append(getOwnerId())
-			.append(getPlanId())
-			.append(getName())
-			.append(getThirdLevelDomain())
-			.append(getTimeZone())
-			.append(isSuspended())
-			.append(getCreatedAt())
-			.append(getUpdatedAt())
-			.toHashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Account == false) {
-		     return false;
-		   }
-		   if (this == obj) {
-		     return true;
-		   }
-		   Account aAccount = (Account) obj;
-		   return new EqualsBuilder()
-		                 .append(getId(), aAccount.getId())
-		                 .append(getOwnerId(), aAccount.getOwnerId())
-		                 .append(getPlanId(), aAccount.getPlanId())
-		                 .append(getName(), aAccount.getName())
-		                 .append(getThirdLevelDomain(), aAccount.getThirdLevelDomain())
-		                 .append(isSuspended(), aAccount.isSuspended())
-		                 .append(getCreatedAt(), aAccount.getCreatedAt())
-		                 .append(getUpdatedAt(), aAccount.getUpdatedAt())
-		                 .isEquals();
 	}
 	
 }

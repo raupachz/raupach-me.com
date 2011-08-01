@@ -2,9 +2,7 @@ package org.beanstalk4j.model;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.beanstalk4j.ToStringBuilder;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -98,37 +96,6 @@ public class Plan implements Serializable {
 			.append("users", getUsers())
 			.append("servers", getServers())
 			.toString();
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(51, 11)
-			.append(getId())
-			.append(getName())
-			.append(getPrice())
-			.append(getRepositories())
-			.append(getStorage())
-			.append(getUsers())
-			.append(getServers())
-			.toHashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Plan == false) {
-			return false;
-		}
-		if (this == obj) {
-			return true;
-		}
-		Plan aPlan = (Plan) obj;
-		return new EqualsBuilder().append(getId(), aPlan.getId())
-				.append(getName(), aPlan.getName())
-				.append(getPrice(), aPlan.getPrice())
-				.append(getRepositories(), aPlan.getRepositories())
-				.append(getStorage(), aPlan.getStorage())
-				.append(getUsers(), aPlan.getUsers())
-				.append(getServers(), aPlan.getServers()).isEquals();
 	}
 	
 }
