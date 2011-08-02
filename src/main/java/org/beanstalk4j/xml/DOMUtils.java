@@ -15,7 +15,9 @@ public class DOMUtils {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			return builder.parse(in);
+			Document document = builder.parse(in);
+			document.normalizeDocument();
+			return document;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
