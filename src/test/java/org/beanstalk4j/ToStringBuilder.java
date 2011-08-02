@@ -48,6 +48,7 @@ public class ToStringBuilder {
     public ToStringBuilder append(String fieldName, String value) {
         if (!fieldsAppended) {
             buffer.append('[');
+            fieldsAppended = true;
         } else {
             buffer.append(' ');
         }

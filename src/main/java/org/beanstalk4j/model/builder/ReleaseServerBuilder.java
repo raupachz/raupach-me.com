@@ -4,7 +4,8 @@ import java.util.Date;
 
 import org.beanstalk4j.model.ReleaseServer;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
-import org.jdom.Element;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Element;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -31,22 +32,22 @@ public class ReleaseServerBuilder {
 	
 	public ReleaseServerBuilder(Element element) {
 		this();
-		accountId(element.getChildText("account-id"));
-		createdAt(element.getChildText("created-at"));
-		environmentName(element.getChildText("environment-name"));
-		id(element.getChildText("id"));
-		localPath(element.getChildText("local-path"));
-		login(element.getChildText("login"));
-		name(element.getChildText("name"));
-		password(element.getChildText("password"));
-		port(element.getChildText("port"));
-		protocol(element.getChildText("protocol"));
-		remoteAddr(element.getChildText("remote-addr"));
-		remotePath(element.getChildText("remote-path"));
-		repositoryId(element.getChildText("repository-id"));
-		revision(element.getChildText("revision"));
-		serverEnvironmentId(element.getChildText("server-environment-id"));
-		updatedAt(element.getChildText("updated-at"));
+		accountId(DOMUtils.getChildText(element,"account-id"));
+		createdAt(DOMUtils.getChildText(element,"created-at"));
+		environmentName(DOMUtils.getChildText(element,"environment-name"));
+		id(DOMUtils.getChildText(element,"id"));
+		localPath(DOMUtils.getChildText(element,"local-path"));
+		login(DOMUtils.getChildText(element,"login"));
+		name(DOMUtils.getChildText(element,"name"));
+		password(DOMUtils.getChildText(element,"password"));
+		port(DOMUtils.getChildText(element,"port"));
+		protocol(DOMUtils.getChildText(element,"protocol"));
+		remoteAddr(DOMUtils.getChildText(element,"remote-addr"));
+		remotePath(DOMUtils.getChildText(element,"remote-path"));
+		repositoryId(DOMUtils.getChildText(element,"repository-id"));
+		revision(DOMUtils.getChildText(element,"revision"));
+		serverEnvironmentId(DOMUtils.getChildText(element,"server-environment-id"));
+		updatedAt(DOMUtils.getChildText(element,"updated-at"));
 	}
 	
 	public ReleaseServerBuilder accountId(Integer accountId) {

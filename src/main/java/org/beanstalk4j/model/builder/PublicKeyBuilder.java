@@ -4,7 +4,8 @@ import java.util.Date;
 
 import org.beanstalk4j.model.PublicKey;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
-import org.jdom.Element;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Element;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -31,13 +32,13 @@ public class PublicKeyBuilder {
 	
 	public PublicKeyBuilder(Element element) {
 		this();
-		id(element.getChildText("id"));
-		accountId(element.getChildText("account-id"));
-		userId(element.getChildText("user-id"));
-		name(element.getChildText("name"));
-		content(element.getChildText("content"));
-		createdAt(element.getChildText("created-at"));
-		updatedAt(element.getChildText("updated-at"));
+		id(DOMUtils.getChildText(element,"id"));
+		accountId(DOMUtils.getChildText(element,"account-id"));
+		userId(DOMUtils.getChildText(element,"user-id"));
+		name(DOMUtils.getChildText(element,"name"));
+		content(DOMUtils.getChildText(element,"content"));
+		createdAt(DOMUtils.getChildText(element,"created-at"));
+		updatedAt(DOMUtils.getChildText(element,"updated-at"));
 	}
 	
 	public PublicKeyBuilder id(Integer id) {

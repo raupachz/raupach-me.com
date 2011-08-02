@@ -4,7 +4,8 @@ import java.util.Date;
 
 import org.beanstalk4j.model.Changeset;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
-import org.jdom.Element;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Element;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -31,17 +32,17 @@ public class ChangesetBuilder {
 	
 	public ChangesetBuilder(Element element) {
 		this();
-		accountId(element.getChildText("account-id"));
-		repositoryId(element.getChildText("repository-id"));
-		revision(element.getChildText("revision"));
-		message(element.getChildText("message"));
-		author(element.getChildText("author"));
-		email(element.getChildText("email"));
-		changedDirs(element.getChildText("changed-dirs"));
-		changedFiles(element.getChildText("changed-files"));
-		changedProperties(element.getChildText("changed-properties"));
-		tooLarge(element.getChildText("too-large"));
-		time(element.getChildText("time"));
+		accountId(DOMUtils.getChildText(element,"account-id"));
+		repositoryId(DOMUtils.getChildText(element,"repository-id"));
+		revision(DOMUtils.getChildText(element,"revision"));
+		message(DOMUtils.getChildText(element,"message"));
+		author(DOMUtils.getChildText(element,"author"));
+		email(DOMUtils.getChildText(element,"email"));
+		changedDirs(DOMUtils.getChildText(element,"changed-dirs"));
+		changedFiles(DOMUtils.getChildText(element,"changed-files"));
+		changedProperties(DOMUtils.getChildText(element,"changed-properties"));
+		tooLarge(DOMUtils.getChildText(element,"too-large"));
+		time(DOMUtils.getChildText(element,"time"));
 	}
 	
 	public ChangesetBuilder accountId(Integer accountId) {

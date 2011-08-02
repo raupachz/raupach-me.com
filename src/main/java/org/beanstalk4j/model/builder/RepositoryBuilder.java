@@ -4,7 +4,8 @@ import java.util.Date;
 
 import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
-import org.jdom.Element;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Element;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -31,18 +32,18 @@ public class RepositoryBuilder {
 	
 	public RepositoryBuilder(Element element) {
 		this();
-		id(element.getChildText("id"));
-		accountId(element.getChildText("account-id"));
-		anonymous(element.getChildText("anonymous"));
-		type(element.getChildText("type"));
-		name(element.getChildText("name"));
-		title(element.getChildText("title"));
-		revision(element.getChildText("revision"));
-		storageUsedBytes(element.getChildText("storage-used-bytes"));
-		colorLabel(element.getChildText("color-label"));
-		lastCommitAt(element.getChildText("last-commit-at"));
-		createdAt(element.getChildText("created-at"));
-		updatedAt(element.getChildText("updated-at"));
+		id(DOMUtils.getChildText(element,"id"));
+		accountId(DOMUtils.getChildText(element,"account-id"));
+		anonymous(DOMUtils.getChildText(element,"anonymous"));
+		type(DOMUtils.getChildText(element,"type"));
+		name(DOMUtils.getChildText(element,"name"));
+		title(DOMUtils.getChildText(element,"title"));
+		revision(DOMUtils.getChildText(element,"revision"));
+		storageUsedBytes(DOMUtils.getChildText(element,"storage-used-bytes"));
+		colorLabel(DOMUtils.getChildText(element,"color-label"));
+		lastCommitAt(DOMUtils.getChildText(element,"last-commit-at"));
+		createdAt(DOMUtils.getChildText(element,"created-at"));
+		updatedAt(DOMUtils.getChildText(element,"updated-at"));
 	}
 	
 	public RepositoryBuilder id(Integer id) {

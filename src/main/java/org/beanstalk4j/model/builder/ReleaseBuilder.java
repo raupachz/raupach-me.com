@@ -4,7 +4,8 @@ import java.util.Date;
 
 import org.beanstalk4j.model.Release;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
-import org.jdom.Element;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Element;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -31,21 +32,21 @@ public class ReleaseBuilder {
 	
 	public ReleaseBuilder(Element element) {
 		this();
-		accountId(element.getChildText("account-id"));
-		author(element.getChildText("author"));
-		comment(element.getChildText("comment"));
-		createdAt(element.getChildText("created-at"));
-		deployedAt(element.getChildText("deployed-at"));
-		environmentId(element.getChildText("environment-id"));
-		environmentName(element.getChildText("enviornment-name"));
-		id(element.getChildText("id"));
-		lastRetryAt(element.getChildText("last-retry-at"));
-		repositoryId(element.getChildText("repository-id"));
-		retries(element.getChildText("retries"));
-		revision(element.getChildText("revision"));
-		state(element.getChildText("state"));
-		updatedAt(element.getChildText("updated-at"));
-		userId(element.getChildText("user-id"));
+		accountId(DOMUtils.getChildText(element,"account-id"));
+		author(DOMUtils.getChildText(element,"author"));
+		comment(DOMUtils.getChildText(element,"comment"));
+		createdAt(DOMUtils.getChildText(element,"created-at"));
+		deployedAt(DOMUtils.getChildText(element,"deployed-at"));
+		environmentId(DOMUtils.getChildText(element,"environment-id"));
+		environmentName(DOMUtils.getChildText(element,"enviornment-name"));
+		id(DOMUtils.getChildText(element,"id"));
+		lastRetryAt(DOMUtils.getChildText(element,"last-retry-at"));
+		repositoryId(DOMUtils.getChildText(element,"repository-id"));
+		retries(DOMUtils.getChildText(element,"retries"));
+		revision(DOMUtils.getChildText(element,"revision"));
+		state(DOMUtils.getChildText(element,"state"));
+		updatedAt(DOMUtils.getChildText(element,"updated-at"));
+		userId(DOMUtils.getChildText(element,"user-id"));
 	}
 	
 	public ReleaseBuilder accountId(Integer accountId) {

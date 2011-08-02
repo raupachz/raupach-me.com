@@ -4,7 +4,8 @@ import java.util.Date;
 
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
-import org.jdom.Element;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Element;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -31,14 +32,14 @@ public class AccountBuilder {
 	
 	public AccountBuilder(Element element) {
 		this();
-		id(element.getChildText("id"));
-		ownerId(element.getChildText("owner-id"));
-		planId(element.getChildText("plan-id"));
-		name(element.getChildText("name"));
-		thirdLevelDomain(element.getChildText("third-level-domain"));
-		suspended(element.getChildText("suspended"));
-		createdAt(element.getChildText("created-at"));
-		updatedAt(element.getChildText("updated-at"));
+		id(DOMUtils.getChildText(element, "id"));
+		ownerId(DOMUtils.getChildText(element, "owner-id"));
+		planId(DOMUtils.getChildText(element, "plan-id"));
+		name(DOMUtils.getChildText(element, "name"));
+		thirdLevelDomain(DOMUtils.getChildText(element,"third-level-domain"));
+		suspended(DOMUtils.getChildText(element, "suspended"));
+		createdAt(DOMUtils.getChildText(element, "created-at"));
+		updatedAt(DOMUtils.getChildText(element, "updated-at"));
 	}
 	
 	public AccountBuilder id(Integer id) {
@@ -108,10 +109,5 @@ public class AccountBuilder {
 	public Account build() {
 		return account;
 	}
-	
-	
-	
-	
-	
 
 }

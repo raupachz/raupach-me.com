@@ -1,7 +1,8 @@
 package org.beanstalk4j.model.builder;
 
 import org.beanstalk4j.model.Errors;
-import org.jdom.Element;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Element;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -28,7 +29,7 @@ public class ErrorsBuilder {
 	
 	public ErrorsBuilder(Element element) {
 		this();
-		message(element.getChildText("error"));
+		message(DOMUtils.getChildText(element,"error"));
 	}
 	
 	public ErrorsBuilder message(String message) {

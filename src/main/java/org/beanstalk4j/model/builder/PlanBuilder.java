@@ -1,7 +1,8 @@
 package org.beanstalk4j.model.builder;
 
 import org.beanstalk4j.model.Plan;
-import org.jdom.Element;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Element;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -28,13 +29,13 @@ public class PlanBuilder {
 	
 	public PlanBuilder(Element element) {
 		this();
-		id(element.getChildText("id"));
-		name(element.getChildText("name"));
-		price(element.getChildText("price"));
-		repositories(element.getChildText("repositories"));
-		storage(element.getChildText("storage"));
-		users(element.getChildText("users"));
-		servers(element.getChildText("servers"));
+		id(DOMUtils.getChildText(element,"id"));
+		name(DOMUtils.getChildText(element,"name"));
+		price(DOMUtils.getChildText(element,"price"));
+		repositories(DOMUtils.getChildText(element,"repositories"));
+		storage(DOMUtils.getChildText(element,"storage"));
+		users(DOMUtils.getChildText(element,"users"));
+		servers(DOMUtils.getChildText(element,"servers"));
 	}
 	
 	public PlanBuilder id(Integer id) {

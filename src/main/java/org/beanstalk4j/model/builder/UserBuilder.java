@@ -4,7 +4,8 @@ import java.util.Date;
 
 import org.beanstalk4j.model.User;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
-import org.jdom.Element;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Element;
 
 
 /*
@@ -32,17 +33,17 @@ public class UserBuilder {
 	
 	public UserBuilder(Element element) {
 		this();
-		id(element.getChildText("id"));
-		accountId(element.getChildText("account-id"));
-		admin(element.getChildText("admin"));
-		owner(element.getChildText("owner"));
-		firstName(element.getChildText("first-name"));
-		lastName(element.getChildText("last-name"));
-		email(element.getChildText("email"));
-		login(element.getChildText("login"));
-		timeZone(element.getChildText("timezone"));
-		createdAt(element.getChildText("created-at"));
-		updatedAt(element.getChildText("updated-at"));
+		id(DOMUtils.getChildText(element,"id"));
+		accountId(DOMUtils.getChildText(element,"account-id"));
+		admin(DOMUtils.getChildText(element,"admin"));
+		owner(DOMUtils.getChildText(element,"owner"));
+		firstName(DOMUtils.getChildText(element,"first-name"));
+		lastName(DOMUtils.getChildText(element,"last-name"));
+		email(DOMUtils.getChildText(element,"email"));
+		login(DOMUtils.getChildText(element,"login"));
+		timeZone(DOMUtils.getChildText(element,"timezone"));
+		createdAt(DOMUtils.getChildText(element,"created-at"));
+		updatedAt(DOMUtils.getChildText(element,"updated-at"));
 	}
 	
 	public UserBuilder id(Integer id) {

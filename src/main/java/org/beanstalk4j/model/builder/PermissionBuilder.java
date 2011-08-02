@@ -1,7 +1,8 @@
 package org.beanstalk4j.model.builder;
 
 import org.beanstalk4j.model.Permission;
-import org.jdom.Element;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Element;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -28,13 +29,13 @@ public class PermissionBuilder {
 	
 	public PermissionBuilder(Element element) {
 		this();
-		id(element.getChildText("id"));
-		userId(element.getChildText("userId"));
-		repositoryId(element.getChildText("repository-id"));
-		read(element.getChildText("read"));
-		write(element.getChildText("write"));
-		fullDeploymentAccess(element.getChildText("full-deployment-access"));
-		serverEnvironmentId(element.getChildText("server-environment-id"));
+		id(DOMUtils.getChildText(element,"id"));
+		userId(DOMUtils.getChildText(element,"userId"));
+		repositoryId(DOMUtils.getChildText(element,"repository-id"));
+		read(DOMUtils.getChildText(element,"read"));
+		write(DOMUtils.getChildText(element,"write"));
+		fullDeploymentAccess(DOMUtils.getChildText(element,"full-deployment-access"));
+		serverEnvironmentId(DOMUtils.getChildText(element,"server-environment-id"));
 	}
 	
 	public PermissionBuilder id(Integer id) {

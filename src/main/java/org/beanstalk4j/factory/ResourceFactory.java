@@ -1,6 +1,5 @@
 package org.beanstalk4j.factory;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,7 +8,6 @@ import java.util.List;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
 import org.beanstalk4j.model.Comment;
-import org.beanstalk4j.model.Errors;
 import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.PublicKey;
@@ -19,16 +17,16 @@ import org.beanstalk4j.model.User;
 import org.beanstalk4j.model.builder.AccountBuilder;
 import org.beanstalk4j.model.builder.ChangesetBuilder;
 import org.beanstalk4j.model.builder.CommentBuilder;
-import org.beanstalk4j.model.builder.ErrorsBuilder;
 import org.beanstalk4j.model.builder.PermissionBuilder;
 import org.beanstalk4j.model.builder.PlanBuilder;
 import org.beanstalk4j.model.builder.PublicKeyBuilder;
 import org.beanstalk4j.model.builder.RepositoryBuilder;
 import org.beanstalk4j.model.builder.ServerEnvironmentBuilder;
 import org.beanstalk4j.model.builder.UserBuilder;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -47,46 +45,19 @@ import org.jdom.input.SAXBuilder;
  */
 public class ResourceFactory {
 	
-	private final SAXBuilder saxBuilder;
-	
-	public ResourceFactory() {
-		this.saxBuilder = new SAXBuilder();
-	}
-
-	Document buildDocument(InputStream in) {
-		Document document = null;
-		try {
-			document = saxBuilder.build(in);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		} finally {
-			try {
-				in.close();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		}
-		return document;
-	}
-	
-	public Errors buildError(InputStream httpStream) {
-		Document document = buildDocument(httpStream);
-		Element errors = document.getRootElement();
-		return new ErrorsBuilder(errors).build();
-	}
-
 	public Account buildAccount(InputStream httpStream) {
-		Document document = buildDocument(httpStream);
-		Element account = document.getRootElement();
-		return new AccountBuilder(account).build();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		return new AccountBuilder(root).build();
 	}
 
 	public List<Plan> buildPlans(InputStream httpStream) {
 		List<Plan> resultList = new ArrayList<Plan>();
-		Document document = buildDocument(httpStream);
-		Element root = document.getRootElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		NodeList children = root.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Element e = (Element) children.item(i);
 			Plan plan = new PlanBuilder(e).build();
 			resultList.add(plan);
 		}
@@ -95,10 +66,11 @@ public class ResourceFactory {
 
 	public List<User> buildUsers(InputStream httpStream) {
 		List<User> resultList = new ArrayList<User>();
-		Document document = buildDocument(httpStream);
-		Element root = document.getRootElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		NodeList children = root.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Element e = (Element) children.item(i);
 			User user = new UserBuilder(e).build();
 			resultList.add(user);
 		}
@@ -106,17 +78,18 @@ public class ResourceFactory {
 	}
 
 	public User buildUser(InputStream httpStream) {
-		Document document = buildDocument(httpStream);
-		Element account = document.getRootElement();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element account = document.getDocumentElement();
 		return new UserBuilder(account).build();
 	}
 
 	public List<PublicKey> buildPublicKeys(InputStream httpStream) {
 		List<PublicKey> resultList = new ArrayList<PublicKey>();
-		Document document = buildDocument(httpStream);
-		Element root = document.getRootElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		NodeList children = root.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Element e = (Element) children.item(i);
 			PublicKey publicKey = new PublicKeyBuilder(e).build();
 			resultList.add(publicKey);
 		}
@@ -124,17 +97,18 @@ public class ResourceFactory {
 	}
 
 	public PublicKey buildPublicKey(InputStream httpStream) {
-		Document document = buildDocument(httpStream);
-		Element account = document.getRootElement();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element account = document.getDocumentElement();
 		return new PublicKeyBuilder(account).build();
 	}
 
 	public List<Repository> buildRepositories(InputStream httpStream) {
 		List<Repository> resultList = new ArrayList<Repository>();
-		Document document = buildDocument(httpStream);
-		Element root = document.getRootElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext(); ) {
-			Element e = (Element) it.next();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		NodeList children = root.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Element e = (Element) children.item(i);
 			Repository repository = new RepositoryBuilder(e).build();
 			resultList.add(repository);
 		}
@@ -142,17 +116,18 @@ public class ResourceFactory {
 	}
 
 	public Repository buildRepository(InputStream httpStream) {
-		Document document = buildDocument(httpStream);
-		Element root = document.getRootElement();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
 		return new RepositoryBuilder(root).build();
 	}
 
 	public List<Permission> buildPermissions(InputStream httpStream) {
 		List<Permission> resultList = new ArrayList<Permission>();
-		Document document = buildDocument(httpStream);
-		Element root = document.getRootElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext(); ) {
-			Element e = (Element) it.next();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		NodeList children = root.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Element e = (Element) children.item(i);
 			Permission permission = new PermissionBuilder(e).build();
 			resultList.add(permission);
 		}
@@ -161,10 +136,11 @@ public class ResourceFactory {
 
 	public List<Changeset> buildChangesets(InputStream httpStream) {
 		List<Changeset> resultList = new ArrayList<Changeset>();
-		Document document = buildDocument(httpStream);
-		Element root = document.getRootElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext(); ) {
-			Element e = (Element) it.next();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		NodeList children = root.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Element e = (Element) children.item(i);
 			Changeset changeset = new ChangesetBuilder(e).build();
 			resultList.add(changeset);
 		}
@@ -172,17 +148,18 @@ public class ResourceFactory {
 	}
 
 	public Changeset buildChangeset(InputStream httpStream) {
-		Document document = buildDocument(httpStream);
-		Element root = document.getRootElement();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
 		return new ChangesetBuilder(root).build();	
 	}
 
 	public List<Comment> buildComments(InputStream httpStream) {
 		List<Comment> resultList = new ArrayList<Comment>();
-		Document document = buildDocument(httpStream);
-		Element root = document.getRootElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext(); ) {
-			Element e = (Element) it.next();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		NodeList children = root.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Element e = (Element) children.item(i);
 			Comment comment = new CommentBuilder(e).build();
 			resultList.add(comment);
 		}
@@ -191,10 +168,11 @@ public class ResourceFactory {
 
 	public List<ServerEnvironment> buildServerEnvironments(InputStream httpStream) {
 		List<ServerEnvironment> resultList = new ArrayList<ServerEnvironment>();
-		Document document = buildDocument(httpStream);
-		Element root = document.getRootElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext(); ) {
-			Element e = (Element) it.next();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		NodeList children = root.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Element e = (Element) children.item(i);
 			ServerEnvironment serverEnvironment = new ServerEnvironmentBuilder(e).build();
 			resultList.add(serverEnvironment);
 		}
@@ -202,8 +180,8 @@ public class ResourceFactory {
 	}
 
 	public ServerEnvironment buildServerEnvironment(InputStream httpStream) {
-		Document document = buildDocument(httpStream);
-		Element root = document.getRootElement();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
 		return new ServerEnvironmentBuilder(root).build();	
 	}
 

@@ -4,7 +4,8 @@ import java.util.Date;
 
 import org.beanstalk4j.model.Comment;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
-import org.jdom.Element;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Element;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -31,20 +32,20 @@ public class CommentBuilder {
 	
 	public CommentBuilder(Element element) {
 		this();
-		id(element.getChildText("id"));
-		accountId(element.getChildText("account-id"));
-		authorId(element.getChildText("author-id"));
-		authorName(element.getChildText("author-name"));
-		authorLogin(element.getChildText("author-login"));
-		authorEmail(element.getChildText("author-email"));
-		body(element.getChildText("body"));
-		createdAt(element.getChildText("created-at"));
-		filePath(element.getChildText("file-path"));
-		lineNumber(element.getChildText("line-number"));
-		renderedBody(element.getChildText("rendered-body"));
-		repositoryId(element.getChildText("repository-id"));
-		revision(element.getChildText("revision"));
-		updatedAt(element.getChildText("updated-at"));
+		id(DOMUtils.getChildText(element,"id"));
+		accountId(DOMUtils.getChildText(element,"account-id"));
+		authorId(DOMUtils.getChildText(element,"author-id"));
+		authorName(DOMUtils.getChildText(element,"author-name"));
+		authorLogin(DOMUtils.getChildText(element,"author-login"));
+		authorEmail(DOMUtils.getChildText(element,"author-email"));
+		body(DOMUtils.getChildText(element,"body"));
+		createdAt(DOMUtils.getChildText(element,"created-at"));
+		filePath(DOMUtils.getChildText(element,"file-path"));
+		lineNumber(DOMUtils.getChildText(element,"line-number"));
+		renderedBody(DOMUtils.getChildText(element,"rendered-body"));
+		repositoryId(DOMUtils.getChildText(element,"repository-id"));
+		revision(DOMUtils.getChildText(element,"revision"));
+		updatedAt(DOMUtils.getChildText(element,"updated-at"));
 	}
 	
 	public CommentBuilder id(Integer id) {

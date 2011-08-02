@@ -4,7 +4,8 @@ import java.util.Date;
 
 import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
-import org.jdom.Element;
+import org.beanstalk4j.xml.DOMUtils;
+import org.w3c.dom.Element;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -31,15 +32,15 @@ public class ServerEnvironmentBuilder {
 	
 	public ServerEnvironmentBuilder(Element element) {
 		this();
-		accountId(element.getChildText("account-id"));
-		automatic(element.getChildText("automatic"));
-		branchName(element.getChildText("branch-name"));
-		createdAt(element.getChildText("created-at"));
-		currentVersion(element.getChildText("current-version"));
-		id(element.getChildText("id"));
-		name(element.getChildText("name"));
-		repositoryId(element.getChildText("repository-id"));
-		updatedAt(element.getChildText("updated-at"));
+		accountId(DOMUtils.getChildText(element,"account-id"));
+		automatic(DOMUtils.getChildText(element,"automatic"));
+		branchName(DOMUtils.getChildText(element,"branch-name"));
+		createdAt(DOMUtils.getChildText(element,"created-at"));
+		currentVersion(DOMUtils.getChildText(element,"current-version"));
+		id(DOMUtils.getChildText(element,"id"));
+		name(DOMUtils.getChildText(element,"name"));
+		repositoryId(DOMUtils.getChildText(element,"repository-id"));
+		updatedAt(DOMUtils.getChildText(element,"updated-at"));
 	}
 	
 	public ServerEnvironmentBuilder accountId(Integer accountId) {
