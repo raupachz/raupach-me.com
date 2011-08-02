@@ -26,6 +26,7 @@ import org.beanstalk4j.model.builder.UserBuilder;
 import org.beanstalk4j.xml.DOMUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /*
@@ -57,9 +58,12 @@ public class ResourceFactory {
 		Element root = document.getDocumentElement();
 		NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
-			Element e = (Element) children.item(i);
-			Plan plan = new PlanBuilder(e).build();
-			resultList.add(plan);
+			Node node = children.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element e = (Element) node;
+				Plan plan = new PlanBuilder(e).build();
+				resultList.add(plan);
+			}
 		}
 		return resultList;
 	}
@@ -70,9 +74,12 @@ public class ResourceFactory {
 		Element root = document.getDocumentElement();
 		NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
-			Element e = (Element) children.item(i);
-			User user = new UserBuilder(e).build();
-			resultList.add(user);
+			Node node = children.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element e = (Element) node;
+				User user = new UserBuilder(e).build();
+				resultList.add(user);
+			}
 		}
 		return resultList;
 	}
@@ -89,9 +96,12 @@ public class ResourceFactory {
 		Element root = document.getDocumentElement();
 		NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
-			Element e = (Element) children.item(i);
-			PublicKey publicKey = new PublicKeyBuilder(e).build();
-			resultList.add(publicKey);
+			Node node = children.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element e = (Element) node;
+				PublicKey publicKey = new PublicKeyBuilder(e).build();
+				resultList.add(publicKey);
+			}
 		}
 		return resultList;
 	}
@@ -108,9 +118,12 @@ public class ResourceFactory {
 		Element root = document.getDocumentElement();
 		NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
-			Element e = (Element) children.item(i);
-			Repository repository = new RepositoryBuilder(e).build();
-			resultList.add(repository);
+			Node node = children.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element e = (Element) node;
+				Repository repository = new RepositoryBuilder(e).build();
+				resultList.add(repository);
+			}
 		}
 		return resultList;
 	}
@@ -127,9 +140,12 @@ public class ResourceFactory {
 		Element root = document.getDocumentElement();
 		NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
-			Element e = (Element) children.item(i);
-			Permission permission = new PermissionBuilder(e).build();
-			resultList.add(permission);
+			Node node = children.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element e = (Element) node;
+				Permission permission = new PermissionBuilder(e).build();
+				resultList.add(permission);
+			}
 		}
 		return resultList;
 	}
@@ -140,9 +156,12 @@ public class ResourceFactory {
 		Element root = document.getDocumentElement();
 		NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
-			Element e = (Element) children.item(i);
-			Changeset changeset = new ChangesetBuilder(e).build();
-			resultList.add(changeset);
+			Node node = children.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element e = (Element) node;
+				Changeset changeset = new ChangesetBuilder(e).build();
+				resultList.add(changeset);
+			}
 		}
 		return resultList;
 	}
@@ -159,9 +178,12 @@ public class ResourceFactory {
 		Element root = document.getDocumentElement();
 		NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
-			Element e = (Element) children.item(i);
-			Comment comment = new CommentBuilder(e).build();
-			resultList.add(comment);
+			Node node = children.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element e = (Element) node;
+				Comment comment = new CommentBuilder(e).build();
+				resultList.add(comment);
+			}
 		}
 		return resultList;
 	}
@@ -172,9 +194,12 @@ public class ResourceFactory {
 		Element root = document.getDocumentElement();
 		NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
-			Element e = (Element) children.item(i);
-			ServerEnvironment serverEnvironment = new ServerEnvironmentBuilder(e).build();
-			resultList.add(serverEnvironment);
+			Node node = children.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element e = (Element) node;
+				ServerEnvironment serverEnvironment = new ServerEnvironmentBuilder(e).build();
+				resultList.add(serverEnvironment);
+			}
 		}
 		return resultList;
 	}

@@ -26,7 +26,9 @@ public class DOMUtils {
 		NodeList nodeList = element.getElementsByTagName(tag);
 		if(nodeList != null && nodeList.getLength() > 0) {
 			Element el = (Element)nodeList.item(0);
-			value = el.getFirstChild().getNodeValue();
+			if (el.getFirstChild() != null) {
+				value = el.getFirstChild().getNodeValue();
+			}
 		}
 		return value;
 	}
