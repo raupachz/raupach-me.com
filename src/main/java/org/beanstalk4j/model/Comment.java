@@ -3,7 +3,7 @@ package org.beanstalk4j.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.beanstalk4j.ToStringBuilder;
+import org.beanstalk4j.utils.ToStringBuilder;
 
 /*
  * Copyright 2011 Björn Raupach

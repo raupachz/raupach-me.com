@@ -2,7 +2,6 @@ package org.beanstalk4j.factory;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.beanstalk4j.model.Account;

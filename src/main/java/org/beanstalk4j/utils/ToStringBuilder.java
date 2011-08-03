@@ -1,4 +1,4 @@
-package org.beanstalk4j;
+package org.beanstalk4j.utils;
 
 /*
  * Copyright 2011 Björn Raupach
