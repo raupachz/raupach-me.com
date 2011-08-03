@@ -6,6 +6,12 @@
     <format>zip</format>
   </formats>
   <files>
+		<file>
+      <source>${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}</source>
+    </file>
+    <file>
+      <source>${project.build.directory}/${project.artifactId}-${project.version}-sources.${project.packaging}</source>
+    </file>
     <file>
       <source>LICENSE</source>
     </file>
