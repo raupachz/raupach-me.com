@@ -24,13 +24,15 @@ public class IsoDateTimeFormat {
 	private static final SimpleDateFormat isodatetime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
 	
 	public static synchronized Date parse(String source) {
-		if (source.endsWith("Z")) {
+		if (source == null) {
+			return null;
+		} else if (source.endsWith("Z")) {
 			source = source.substring(0, source.length() - 1) + "GMT-00:00";
 		} else {
 			int inset = 6;
 			String s0 = source.substring( 0, source.length() - inset );
-			 String s1 = source.substring( source.length() - inset, source.length() );
-			 source = s0 + "GMT" + s1;
+			String s1 = source.substring( source.length() - inset, source.length() );
+			source = s0 + "GMT" + s1;
 		}
 		try {
 			return isodatetime.parse(source);

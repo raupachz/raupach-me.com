@@ -3,6 +3,7 @@ package org.beanstalk4j.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.beanstalk4j.ColorLabel;
 import org.beanstalk4j.utils.ToStringBuilder;
 
 /*
@@ -25,7 +26,7 @@ public class Repository implements Serializable {
 	private Integer id;
 	private Integer accountId;
 	private Boolean anonymous;
-	private String colorLabel;
+	private ColorLabel colorLabel;
 	private String type;
 	private String name;
 	private Integer revision;
@@ -59,11 +60,11 @@ public class Repository implements Serializable {
 		this.anonymous = anonymous;
 	}
 	
-	public String getColorLabel() {
+	public ColorLabel getColorLabel() {
 		return colorLabel;
 	}
 	
-	public void setColorLabel(String colorLabel) {
+	public void setColorLabel(ColorLabel colorLabel) {
 		this.colorLabel = colorLabel;
 	}
 	

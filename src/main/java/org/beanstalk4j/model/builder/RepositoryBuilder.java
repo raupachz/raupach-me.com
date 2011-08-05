@@ -2,6 +2,7 @@ package org.beanstalk4j.model.builder;
 
 import java.util.Date;
 
+import org.beanstalk4j.ColorLabel;
 import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
 import org.beanstalk4j.xml.DOMUtils;
@@ -107,7 +108,7 @@ public class RepositoryBuilder {
 	}
 	
 	public RepositoryBuilder colorLabel(String colorLabel) {
-		repository.setColorLabel(colorLabel);
+		repository.setColorLabel(ColorLabel.parse(colorLabel));
 		return this;
 	}
 	

@@ -36,6 +36,12 @@ public class BeanstalkApi {
 	private final HttpConnection httpConnection;
 	private final ResourceFactory resourceFactory;
 	
+	/**
+	  * Constructor.
+	  * @param accountName (required) your Beanstalk account name.
+	  * @param username (required)
+	  * @param password (required) 
+	  */
 	public BeanstalkApi(String accountName, String username, String password) {
 		this.httpConnection = new HttpConnection(accountName, username, password);
 		this.resourceFactory = new ResourceFactory();
@@ -270,17 +276,31 @@ public class BeanstalkApi {
 	 * @param title must be unique
 	 * @return
 	 */
-	public Repository createRepository(String name, String title) {
+	public Repository createRepository(String name, String title, ColorLabel colorLabel) {
 		URL url = httpConnection.createURL("/api/repositories.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<repository>");
 		sb.append("<name>").append(name).append("</name>");
 		sb.append("<title>").append(title).append("</title>");
+		sb.append("<color-label>").append(colorLabel).append("</color-label>");
 		sb.append("</repository>");
 		
 		InputStream httpStream = httpConnection.doPost(url, sb.toString());
 		return resourceFactory.buildRepository(httpStream);
+	}
+	
+	public void updateRepository(Repository repository) {
+		URL url = httpConnection.createURL("/api/repositories/" + repository.getId() + ".xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<repository>");
+		sb.append("<name>").append(repository.getName()).append("</name>");
+		sb.append("<title>").append(repository.getTitle()).append("</title>");
+		sb.append("<color-label>").append(repository.getColorLabel()).append("</color-label>");
+		sb.append("</repository>");
+		
+		httpConnection.doPut(url, sb.toString());
 	}
 	
 	/**
