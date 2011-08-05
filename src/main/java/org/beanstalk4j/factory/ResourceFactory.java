@@ -209,4 +209,10 @@ public class ResourceFactory {
 		return new ServerEnvironmentBuilder(root).build();	
 	}
 
+	public Permission buildPermission(InputStream httpStream) {
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		return new PermissionBuilder(root).build();	
+	}
+
 }

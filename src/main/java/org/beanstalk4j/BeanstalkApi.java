@@ -290,6 +290,10 @@ public class BeanstalkApi {
 		return resourceFactory.buildRepository(httpStream);
 	}
 	
+	/**
+	 * Update existing repository
+	 * @param repository
+	 */
 	public void updateRepository(Repository repository) {
 		URL url = httpConnection.createURL("/api/repositories/" + repository.getId() + ".xml");
 		
@@ -302,7 +306,6 @@ public class BeanstalkApi {
 		
 		httpConnection.doPut(url, sb.toString());
 	}
-	
 	/**
 	 * Find permissions for user
 	 */
@@ -310,6 +313,26 @@ public class BeanstalkApi {
 		URL url = httpConnection.createURL("/api/permissions/" + userId + ".xml");
 		InputStream httpStream = httpConnection.doGet(url);
 		return resourceFactory.buildPermissions(httpStream);
+	}
+	
+	/**
+	 * Create permissions for user. Admin privileges required for this API method.
+	 * @param permission
+	 * @return
+	 */
+	public Permission createPermission(Permission permission) {
+		URL url = httpConnection.createURL("/api/permissions.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<permission>");
+		sb.append("<user-id>").append(permission.getUserId()).append("</user-id>");
+		sb.append("<repository-id>").append(permission.getRepositoryId()).append("</repository-id>");
+		sb.append("<write>").append(permission.getWrite()).append("</write>");
+		sb.append("<server-environment-id>").append(permission.getServerEnvironmentId()).append("</server-environment-id>");
+		sb.append("</permission>");
+		
+		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		return resourceFactory.buildPermission(httpStream);
 	}
 	
 	/**
