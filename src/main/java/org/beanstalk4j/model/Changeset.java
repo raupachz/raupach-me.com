@@ -24,7 +24,7 @@ public class Changeset implements Serializable {
 	
 	private Integer accountId;
 	private Integer repositoryId;
-	private Integer revision;
+	private String revision;
 	private String message;
 	private String author;
 	private String email;
@@ -50,11 +50,11 @@ public class Changeset implements Serializable {
 		this.repositoryId = repositoryId;
 	}
 	
-	public Integer getRevision() {
+	public String getRevision() {
 		return revision;
 	}
 	
-	public void setRevision(Integer revision) {
+	public void setRevision(String revision) {
 		this.revision = revision;
 	}
 	

@@ -63,13 +63,9 @@ public class ChangesetBuilder {
 		return repositoryId(Integer.valueOf(repositoryId));
 	}
 	
-	public ChangesetBuilder revision(Integer revision) {
+	public ChangesetBuilder revision(String revision) {
 		changeset.setRevision(revision);
 		return this;
-	}
-	
-	public ChangesetBuilder revision(String revision) {
-		return revision(Integer.valueOf(revision));
 	}
 	
 	public ChangesetBuilder message(String message) {
