@@ -57,17 +57,17 @@ public class BeanstalkApi {
 		return resourceFactory.buildAccount(httpStream);
 	}
 	
-	public void updateAccount(String name, String timeZone) {
+	/**
+	 * Update account
+	 * @param account
+	 */
+	public void updateAccount(Account account) {
 		URL url = httpConnection.createURL("/api/account.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<account>");
-		if (name != null) {
-			sb.append("<name>").append(name).append("</name>");
-		}
-		if (timeZone != null) {
-			sb.append("<time-zone>").append(timeZone).append("</time-zone>");
-		}
+		sb.append("<name>").append(account.getName()).append("</name>");
+		sb.append("<time-zone>").append(account.getTimeZone()).append("</time-zone>");
 		sb.append("</account>");
 		
 		httpConnection.doPut(url, sb.toString());
@@ -488,6 +488,61 @@ public class BeanstalkApi {
 		
 		InputStream httpStream = httpConnection.doPost(url, sb.toString());
 		return resourceFactory.buildComment(httpStream);
+	}
+	
+	/**
+	 * Create a Server Environment
+	 * @param repositoryId
+	 * @param name
+	 * @return
+	 */
+	public ServerEnvironment createServerEnvironment(Integer repositoryId, String name) {
+		URL url = httpConnection.createURL("/api/" + repositoryId + "/server_environments.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<server-environment>");
+		sb.append("</name>").append(name).append("</name>");
+		sb.append("</server-environment>");
+		
+		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		return resourceFactory.buildServerEnvironment(httpStream);
+	}
+	
+	/**
+	 * Create a Server Environment (git)
+	 * @param repositoryId
+	 * @param name
+	 * @param branchName
+	 * @return
+	 */
+	public ServerEnvironment createServerEnvironment(Integer repositoryId, String name, String branchName) {
+		URL url = httpConnection.createURL("/api/" + repositoryId + "/server_environments.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<server-environment>");
+		sb.append("</name>").append(name).append("</name>");
+		sb.append("</branch-name>").append(name).append("</branch-name>");
+		sb.append("</server-environment>");
+		
+		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		return resourceFactory.buildServerEnvironment(httpStream);
+	}
+	
+	/**
+	 * Update existing Server Environment
+	 * @param serverEnvironment
+	 */
+	public void updateServerEnvironment(ServerEnvironment serverEnvironment) {
+		URL url = httpConnection.createURL("/api/" + serverEnvironment.getRepositoryId() + "/server_environments/" + serverEnvironment.getId() + ".xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<server-environment>");
+		sb.append("<name>").append(serverEnvironment.getName()).append("</name>");
+		sb.append("<automatic>").append(serverEnvironment.getAutomatic()).append("</automatic>");
+		sb.append("<branch-name>").append(serverEnvironment.getBranchName()).append("</branch-name>");
+		sb.append("</server-environment>");
+		
+		httpConnection.doPut(url, sb.toString());
 	}
 	
 	/**
