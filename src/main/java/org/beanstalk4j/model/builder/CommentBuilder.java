@@ -128,13 +128,9 @@ public class CommentBuilder {
 		return repositoryId(Integer.valueOf(repositoryId));
 	}
 	
-	public CommentBuilder revision(Integer revision) {
+	public CommentBuilder revision(String revision) {
 		comment.setRevision(revision);
 		return this;
-	}
-	
-	public CommentBuilder revision(String revision) {
-		return revision(Integer.valueOf(revision));
 	}
 	
 	public CommentBuilder updatedAt(Date updatedAt) {
