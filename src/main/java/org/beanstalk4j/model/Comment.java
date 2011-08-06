@@ -34,7 +34,7 @@ public class Comment implements Serializable {
 	private String lineNumber;
 	private String renderedBody;
 	private Integer repositoryId;
-	private Integer revision;
+	private String revision;
 	private Date updatedAt;
 	
 	public Integer getId() {
@@ -133,11 +133,11 @@ public class Comment implements Serializable {
 		this.repositoryId = repositoryId;
 	}
 	
-	public Integer getRevision() {
+	public String getRevision() {
 		return revision;
 	}
 	
-	public void setRevision(Integer revision) {
+	public void setRevision(String revision) {
 		this.revision = revision;
 	}
 	

@@ -215,4 +215,10 @@ public class ResourceFactory {
 		return new PermissionBuilder(root).build();	
 	}
 
+	public Comment buildComment(InputStream httpStream) {
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		return new CommentBuilder(root).build();	
+	}
+
 }

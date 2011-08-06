@@ -402,7 +402,7 @@ public class BeanstalkApi {
 	
 	/**
 	 * Find all comments for a repository
-	 * @param repositoryId Id of a repository
+	 * @param repositoryId Id of the repository
 	 * @return all comments
 	 */
 	public List<Comment> getComments(Integer repositoryId) {
@@ -413,13 +413,81 @@ public class BeanstalkApi {
 	
 	/**
 	 * Find all comments for a repository
-	 * @param name Nme of a repository
+	 * @param reposioryName of the repository
 	 * @return all comments
 	 */
-	public List<Comment> getComments(String name) {
-		URL url = httpConnection.createURL("/api/" + name + "/comments.xml");
+	public List<Comment> getComments(String repositoryName) {
+		URL url = httpConnection.createURL("/api/" + repositoryName + "/comments.xml");
 		InputStream httpStream = httpConnection.doGet(url);
 		return resourceFactory.buildComments(httpStream);
+	}
+	
+	/**
+	 * Find all comments for specific changeset
+	 * @param repositoryId
+	 * @param revision
+	 * @return
+	 */
+	public List<Comment> getComments(Integer repositoryId, String revision) {
+		URL url = httpConnection.createURL("/api/" + repositoryId + "/comments.xml?revision=" + revision);
+		InputStream httpStream = httpConnection.doGet(url);
+		return resourceFactory.buildComments(httpStream);
+	}
+	
+	/**
+	 * Find all comments for specific changeset
+	 * @param repositoryName
+	 * @param revision
+	 * @return
+	 */
+	public List<Comment> getComments(String repositoryName, String revision) {
+		URL url = httpConnection.createURL("/api/" + repositoryName + "/comments.xml?revision=" + revision);
+		InputStream httpStream = httpConnection.doGet(url);
+		return resourceFactory.buildComments(httpStream);
+	}
+	
+	/**
+	 * Find a single comment by id
+	 * @param id
+	 * @return single comment
+	 */
+	public Comment getComment(Integer repositoryId, Integer id) {
+		URL url = httpConnection.createURL("/api/" + repositoryId + "/comments/" + id + ".xml");
+		InputStream httpStream = httpConnection.doGet(url);
+		return resourceFactory.buildComment(httpStream);
+	}
+	
+	/**
+	 * Find a single comment by id
+	 * @param repositoryName
+	 * @param id
+	 * @return
+	 */
+	public Comment getComment(String repositoryName, Integer id) {
+		URL url = httpConnection.createURL("/api/" + repositoryName + "/comments/" + id + ".xml");
+		InputStream httpStream = httpConnection.doGet(url);
+		return resourceFactory.buildComment(httpStream);
+	}
+	
+	/**
+	 * Create a new comment
+	 * @param repositoryId
+	 * @param comment
+	 * @return
+	 */
+	public Comment createComment(Integer repositoryId, Comment comment) {
+		URL url = httpConnection.createURL("/api/" + repositoryId + "/comments.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<comment>");
+		sb.append("<revision>").append(comment.getRevision()).append("</revision>");
+		sb.append("<body>").append(comment.getBody()).append("</body>");
+		sb.append("<file-path>").append(comment.getFilePath()).append("</file-path>");
+		sb.append("<line-number>").append(comment.getLineNumber()).append("</line-number>");
+		sb.append("</comment>");
+		
+		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		return resourceFactory.buildComment(httpStream);
 	}
 	
 	/**
