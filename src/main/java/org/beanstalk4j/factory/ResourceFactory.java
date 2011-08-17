@@ -10,6 +10,7 @@ import org.beanstalk4j.model.Comment;
 import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.PublicKey;
+import org.beanstalk4j.model.ReleaseServer;
 import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.model.User;
@@ -19,6 +20,7 @@ import org.beanstalk4j.model.builder.CommentBuilder;
 import org.beanstalk4j.model.builder.PermissionBuilder;
 import org.beanstalk4j.model.builder.PlanBuilder;
 import org.beanstalk4j.model.builder.PublicKeyBuilder;
+import org.beanstalk4j.model.builder.ReleaseServerBuilder;
 import org.beanstalk4j.model.builder.RepositoryBuilder;
 import org.beanstalk4j.model.builder.ServerEnvironmentBuilder;
 import org.beanstalk4j.model.builder.UserBuilder;
@@ -219,6 +221,28 @@ public class ResourceFactory {
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
 		return new CommentBuilder(root).build();	
+	}
+
+	public List<ReleaseServer> buildReleaseServers(InputStream httpStream) {
+		List<ReleaseServer> resultList = new ArrayList<ReleaseServer>();
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		NodeList children = root.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Node node = children.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element e = (Element) node;
+				ReleaseServer releaseServer = new ReleaseServerBuilder(e).build();
+				resultList.add(releaseServer);
+			}
+		}
+		return resultList;
+	}
+
+	public ReleaseServer buildReleaseServer(InputStream httpStream) {
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		return new ReleaseServerBuilder(root).build();	
 	}
 
 }

@@ -12,6 +12,7 @@ import org.beanstalk4j.model.Comment;
 import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.PublicKey;
+import org.beanstalk4j.model.ReleaseServer;
 import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.model.User;
@@ -579,6 +580,93 @@ public class BeanstalkApi {
 		InputStream httpStream = httpConnection.doGet(url);
 		return resourceFactory.buildServerEnvironment(httpStream);
 	}
-
+	
+	/**
+	 * Find all Release Servers
+	 * @param repositoryId
+	 * @param environmentId
+	 * @return all release servers
+	 */
+	public List<ReleaseServer> getReleaseServers(Integer repositoryId, Integer environmentId) {
+		URL url = httpConnection.createURL("/api/" + repositoryId + "/release_servers.xml?environment_id=" + environmentId);
+		InputStream httpStream = httpConnection.doGet(url);
+		return resourceFactory.buildReleaseServers(httpStream);
+	}
+	
+	/**
+	 * Find a single Release Server
+	 * @param repositoryId
+	 * @param releaseServerId
+	 * @return
+	 */
+	public ReleaseServer getReleaseServer(Integer repositoryId, Integer releaseServerId) {
+		URL url = httpConnection.createURL("/api/" + repositoryId + "/release_servers/" + repositoryId + ".xml");
+		InputStream httpStream = httpConnection.doGet(url);
+		return resourceFactory.buildReleaseServer(httpStream);
+	}
+	
+	/**
+	 * Create a Release Server
+	 * @param repositoryId
+	 * @param environmentId
+	 * @param name
+	 * @param localPath
+	 * @param remotePath
+	 * @param remoteAddr
+	 * @param protocol
+	 * @param port
+	 * @param login
+	 * @param password
+	 * @return
+	 */
+	public ReleaseServer createReleaseServer(Integer repositoryId, Integer environmentId, String name, String localPath, String remotePath, String remoteAddr, String protocol, Integer port, String login, String password) {
+		URL url = httpConnection.createURL("/api/" + repositoryId + "/release_servers.xml?environment_id=" + environmentId);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<release-server>");
+		sb.append("<name>").append(name).append("</name>");
+		sb.append("<local-path>").append(localPath).append("</local-path>");
+		sb.append("<remote-path>").append(remotePath).append("</remote-path>");
+		sb.append("<remote-addr>").append(remoteAddr).append("</remote-addr>");
+		sb.append("<protocol>").append(protocol).append("</protocol>");
+		sb.append("<port>").append(port).append("</port>");
+		sb.append("<login>").append(login).append("</login>");
+		sb.append("<password>").append(password).append("</password>");
+		sb.append("</release-server>");
+		
+		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		return resourceFactory.buildReleaseServer(httpStream);
+	}
+	
+	/**
+	 * Update existing Release Server
+	 * @param releaseServer
+	 */
+	public void updateReleaseServer(ReleaseServer releaseServer) {
+		URL url = httpConnection.createURL("/api/" + releaseServer.getRepositoryId() + "/release_servers/" + releaseServer.getId());
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<release-server>");
+		sb.append("<name>").append(releaseServer.getName()).append("</name>");
+		sb.append("<local-path>").append(releaseServer.getLocalPath()).append("</local-path>");
+		sb.append("<remote-path>").append(releaseServer.getRemotePath()).append("</remote-path>");
+		sb.append("<remote-addr>").append(releaseServer.getRemoteAddr()).append("</remote-addr>");
+		sb.append("<protocol>").append(releaseServer.getProtocol()).append("</protocol>");
+		sb.append("<port>").append(releaseServer.getPort()).append("</port>");
+		sb.append("<login>").append(releaseServer.getLogin()).append("</login>");
+		sb.append("<password>").append(releaseServer.getPassword()).append("</password>");
+		sb.append("</release-server>");
+		
+		httpConnection.doPut(url, sb.toString());
+	}
+	
+	/**
+	 * Delete an existing Release Server
+	 * @param releaseServer
+	 */
+	public void deleteReleaseServer(ReleaseServer releaseServer) {
+		URL url = httpConnection.createURL("/api/" + releaseServer.getRepositoryId() + "/release_servers/" + releaseServer.getId() + ".xml");
+		httpConnection.doDelete(url);
+	}
 	
 }
