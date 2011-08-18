@@ -27,60 +27,40 @@ public class HttpConnection  {
 	}
 
 	public InputStream doPost(URL url, String request) {
-		try {
-			byte[] body = request.getBytes("utf-8");
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("POST");
-			con.setDoOutput(true);
-			con.setRequestProperty("Content-Type", "application/xml;charset=utf-8");
-			con.setRequestProperty("Authorization", "Basic "+ credentials);
-			con.setRequestProperty("Content-Length", String.valueOf(body.length));
-			OutputStream os = con.getOutputStream();
-			os.write(body);
-			return con.getInputStream();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return doMethod(url, "POST", request);
 	}
 
-	public InputStream doPut(URL url, String request) {
-		try {
-			byte[] body = request.getBytes("utf-8");
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("PUT");
-			con.setDoOutput(true);
-			con.setRequestProperty("Content-Type", "application/xml;charset=utf-8");
-			con.setRequestProperty("Authorization", "Basic "+ credentials);
-			con.setRequestProperty("Content-Length", String.valueOf(body.length));
-			OutputStream os = con.getOutputStream();
-			os.write(body);
-			return con.getInputStream();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	public void doPut(URL url, String request) {
+		doMethod(url, "PUT", request);
 	}
 
 	public InputStream doGet(URL url) {
-		try {
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("GET");
-			con.setDoOutput(true);
-			con.setRequestProperty("Content-Type", "application/xml;charset=utf-8");
-			con.setRequestProperty("Authorization", "Basic "+ credentials);
-			return con.getInputStream();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return doMethod(url, "GET", null);
 	}
 	
 	public void doDelete(URL url) {
+		doMethod(url, "DELETE", null);
+	}
+	
+	public InputStream doMethod(URL url, String method, String messageBody) {
 		try {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("DELETE");
-			con.setDoOutput(false);
+			con.setRequestMethod(method);
+			con.setRequestProperty("Authorization", "Basic " + credentials);
 			con.setRequestProperty("Content-Type", "application/xml;charset=utf-8");
-			con.setRequestProperty("Authorization", "Basic "+ credentials);
+			if (messageBody != null) {
+				con.setDoOutput(true);
+				byte[] body = messageBody.getBytes("utf-8");
+				con.setRequestProperty("Content-Length", String.valueOf(body.length));
+				OutputStream os = con.getOutputStream();
+				os.write(body);
+			}
 			int responseCode = con.getResponseCode();
+			if (method.equalsIgnoreCase("PUT") || method.equalsIgnoreCase("DELETE")) {
+				return null;
+			} else {
+				return con.getInputStream();
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
