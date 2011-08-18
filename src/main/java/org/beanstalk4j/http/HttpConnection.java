@@ -26,41 +26,18 @@ public class HttpConnection  {
 		}
 	}
 
-	public InputStream doGet(URL url) {
-		try {
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("GET");
-			con.setDoOutput(true);
-			con.setRequestProperty("Content-Type", "application/xml");
-			con.setRequestProperty("Authorization", "Basic "+ credentials);
-			return con.getInputStream();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	public InputStream doPost(URL url, String request) {
 		try {
+			byte[] body = request.getBytes("utf-8");
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("POST");
 			con.setDoOutput(true);
-			con.setRequestProperty("Content-Type", "application/xml");
+			con.setRequestProperty("Content-Type", "application/xml;charset=utf-8");
 			con.setRequestProperty("Authorization", "Basic "+ credentials);
+			con.setRequestProperty("Content-Length", String.valueOf(body.length));
 			OutputStream os = con.getOutputStream();
-			os.write(request.getBytes());
+			os.write(body);
 			return con.getInputStream();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public void doPost(URL url) {
-		try {
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("POST");
-			con.setDoOutput(false);
-			con.setRequestProperty("Content-Type", "application/xml");
-			con.setRequestProperty("Authorization", "Basic "+ credentials);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -68,38 +45,40 @@ public class HttpConnection  {
 
 	public InputStream doPut(URL url, String request) {
 		try {
+			byte[] body = request.getBytes("utf-8");
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("PUT");
 			con.setDoOutput(true);
-			con.setRequestProperty("Content-Type", "application/xml");
+			con.setRequestProperty("Content-Type", "application/xml;charset=utf-8");
 			con.setRequestProperty("Authorization", "Basic "+ credentials);
+			con.setRequestProperty("Content-Length", String.valueOf(body.length));
 			OutputStream os = con.getOutputStream();
-			os.write(request.getBytes());
+			os.write(body);
 			return con.getInputStream();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public InputStream doPut(URL url) {
+	public InputStream doGet(URL url) {
 		try {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("PUT");
-			con.setDoOutput(false);
-			con.setRequestProperty("Content-Type", "application/xml");
+			con.setRequestMethod("GET");
+			con.setDoOutput(true);
+			con.setRequestProperty("Content-Type", "application/xml;charset=utf-8");
 			con.setRequestProperty("Authorization", "Basic "+ credentials);
 			return con.getInputStream();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
 	public void doDelete(URL url) {
 		try {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("DELETE");
 			con.setDoOutput(false);
-			con.setRequestProperty("Content-Type", "application/xml");
+			con.setRequestProperty("Content-Type", "application/xml;charset=utf-8");
 			con.setRequestProperty("Authorization", "Basic "+ credentials);
 			int responseCode = con.getResponseCode();
 		} catch (Exception e) {
