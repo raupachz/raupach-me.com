@@ -12,6 +12,7 @@ import org.beanstalk4j.model.Comment;
 import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.PublicKey;
+import org.beanstalk4j.model.Release;
 import org.beanstalk4j.model.ReleaseServer;
 import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.ServerEnvironment;
@@ -667,6 +668,70 @@ public class BeanstalkApi {
 	public void deleteReleaseServer(ReleaseServer releaseServer) {
 		URL url = httpConnection.createURL("/api/" + releaseServer.getRepositoryId() + "/release_servers/" + releaseServer.getId() + ".xml");
 		httpConnection.doDelete(url);
+	}
+	
+	/**
+	 * Find all releases for account
+	 * @return
+	 */
+	public List<Release> getReleases() {
+		URL url = httpConnection.createURL("/api/releases.xml");
+		InputStream httpStream = httpConnection.doGet(url);
+		return resourceFactory.buildReleases(httpStream);
+	}
+	
+	/**
+	 * Find all releases for repository
+	 * @param repositoryId
+	 * @return
+	 */
+	public List<Release> getReleases(Integer repositoryId) {
+		URL url = httpConnection.createURL("/api/" + repositoryId + "/releases.xml");
+		InputStream httpStream = httpConnection.doGet(url);
+		return resourceFactory.buildReleases(httpStream);
+	}
+	
+	/**
+	 * Find all releases for repository
+	 * @param repositoryId
+	 * @return
+	 */
+	public List<Release> getReleases(String repositoryName) {
+		URL url = httpConnection.createURL("/api/" + repositoryName + "/releases.xml");
+		InputStream httpStream = httpConnection.doGet(url);
+		return resourceFactory.buildReleases(httpStream);
+	}
+	
+	/**
+	 * Find a single release
+	 * @param repositoryId
+	 * @param releaseId
+	 * @return
+	 */
+	public Release getRelease(Integer repositoryId, Integer releaseId) {
+		URL url = httpConnection.createURL("/api/" + repositoryId + "/releases/" + releaseId + ".xml");
+		InputStream httpStream = httpConnection.doGet(url);
+		return resourceFactory.buildRelease(httpStream);
+	}
+	
+	/**
+	 * Retry failed deployment
+	 * @param repositoryId
+	 * @param releaseId
+	 */
+	public void retryFailedRelease(Integer repositoryId, Integer releaseId) {
+		URL url = httpConnection.createURL("/api/" + repositoryId + "/releases/" + releaseId + "/retry.xml");
+		httpConnection.doPut(url, null);
+	}
+	
+	/**
+	 * Retry failed deployment
+	 * @param repositoryName
+	 * @param releaseId
+	 */
+	public void retryFailedRelease(String repositoryName, Integer releaseId) {
+		URL url = httpConnection.createURL("/api/" + repositoryName + "/releases/" + releaseId + "/retry.xml");
+		httpConnection.doPut(url, null);
 	}
 	
 }

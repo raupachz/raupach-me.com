@@ -25,6 +25,10 @@ public class HttpConnection  {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public InputStream doGet(URL url) {
+		return doMethod(url, "GET", null);
+	}
 
 	public InputStream doPost(URL url, String request) {
 		return doMethod(url, "POST", request);
@@ -32,10 +36,6 @@ public class HttpConnection  {
 
 	public void doPut(URL url, String request) {
 		doMethod(url, "PUT", request);
-	}
-
-	public InputStream doGet(URL url) {
-		return doMethod(url, "GET", null);
 	}
 	
 	public void doDelete(URL url) {

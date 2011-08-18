@@ -129,7 +129,11 @@ public class ReleaseBuilder {
 	}
 	
 	public ReleaseBuilder retries(String retries) {
-		return retries(Integer.valueOf(retries));
+		if (retries == null) {
+			return retries(0);
+		} else {
+			return retries(Integer.valueOf(retries));
+		}
 	}
 	
 	public ReleaseBuilder revision(Integer revision) {
