@@ -3,9 +3,13 @@ package org.beanstalk4j;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.beanstalk4j.factory.ResourceFactory;
 import org.beanstalk4j.http.HttpConnection;
+import org.beanstalk4j.logging.DefaultFormatter;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
 import org.beanstalk4j.model.Comment;
@@ -17,6 +21,7 @@ import org.beanstalk4j.model.ReleaseServer;
 import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.model.User;
+import org.omg.CORBA.INITIALIZE;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -35,6 +40,8 @@ import org.beanstalk4j.model.User;
  */
 public class BeanstalkApi {
 	
+	private static Logger logger = Logger.getLogger("org.beanstalk4j");
+	
 	private final HttpConnection httpConnection;
 	private final ResourceFactory resourceFactory;
 	
@@ -47,6 +54,30 @@ public class BeanstalkApi {
 	public BeanstalkApi(String accountName, String username, String password) {
 		this.httpConnection = new HttpConnection(accountName, username, password);
 		this.resourceFactory = new ResourceFactory();
+	}
+	
+	/**
+	  * Constructor.
+	  * @param accountName (required) your Beanstalk account name.
+	  * @param username (required)
+	  * @param password (required) 
+	  * @param debug
+	  */
+	public BeanstalkApi(String accountName, String username, String password, boolean debug) {
+		this.httpConnection = new HttpConnection(accountName, username, password);
+		this.resourceFactory = new ResourceFactory();
+		if (debug) {
+			initializeLogging();
+		}
+	}
+	
+	private void initializeLogging() {
+		Handler[] handlers = Logger.getLogger("").getHandlers();
+		for (Handler h : handlers) {
+			h.setLevel(Level.FINE);
+			h.setFormatter(new DefaultFormatter());
+		}
+		logger.setLevel(Level.FINE);
 	}
 	
 	/**

@@ -5,11 +5,16 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.beanstalk4j.utils.Base64Coder;
+import org.beanstalk4j.xml.XMLFormatter;
 
 public class HttpConnection  {
 
+	private static Logger logger = Logger.getLogger("org.beanstalk4j");
+	
 	private final String host;
 	private final String credentials;
 
@@ -43,6 +48,15 @@ public class HttpConnection  {
 	}
 	
 	public InputStream doMethod(URL url, String method, String messageBody) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine(">> HTTP GET " + url);
+			if (messageBody != null) {
+				String prettyMessageBody = XMLFormatter.prettyFormat(messageBody);
+				for (String line : prettyMessageBody.split("\\n")) 
+					logger.fine(">> HTTP " + line);
+			}
+		}
+		
 		try {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod(method);
@@ -56,6 +70,9 @@ public class HttpConnection  {
 				os.write(body);
 			}
 			int responseCode = con.getResponseCode();
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("<< HTTP " + responseCode);
+			}
 			if (method.equalsIgnoreCase("PUT") || method.equalsIgnoreCase("DELETE")) {
 				return null;
 			} else {
