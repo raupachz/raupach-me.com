@@ -52,8 +52,9 @@ public class HttpConnection  {
 			logger.fine(">> HTTP GET " + url);
 			if (messageBody != null) {
 				String prettyMessageBody = XMLFormatter.prettyFormat(messageBody);
-				for (String line : prettyMessageBody.split("\\n")) 
+				for (String line : prettyMessageBody.split("\\n")) {
 					logger.fine(">> HTTP " + line);
+				}
 			}
 		}
 		
@@ -71,12 +72,20 @@ public class HttpConnection  {
 			}
 			int responseCode = con.getResponseCode();
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("<< HTTP " + responseCode);
+				logger.fine("<< HTTP Status-Code " + responseCode);
 			}
 			if (method.equalsIgnoreCase("PUT") || method.equalsIgnoreCase("DELETE")) {
 				return null;
 			} else {
-				return con.getInputStream();
+				ByteBuffer buffer = new ByteBuffer(con.getInputStream());
+				if (logger.isLoggable(Level.FINE)) {
+					String response = new String(buffer.getByteArray(), "utf-8");
+					String prettyMessageBody = XMLFormatter.prettyFormat(response);
+					for (String line : prettyMessageBody.split("\\n")) {
+						logger.fine("<< HTTP " + line);
+					}
+				}
+				return buffer.getInputStream();
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
