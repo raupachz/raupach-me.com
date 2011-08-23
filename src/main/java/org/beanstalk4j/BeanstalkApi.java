@@ -715,6 +715,24 @@ public class BeanstalkApi {
 	}
 	
 	/**
+	 * Create a new release
+	 */
+	public Release createRelease(Integer repositoryId, Integer environmentId, String revision, String comment) {
+		URL url = httpConnection.createURL("/api/" + repositoryId + "/releases.xml?environment_id=" + environmentId);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<release>");
+		sb.append("<revision>").append(revision).append("</revision>");
+		if (comment != null) {
+			sb.append("<comment>").append(comment).append("</comment>");
+		}
+		sb.append("</revision>");
+
+		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		return resourceFactory.buildRelease(httpStream);
+	}
+	
+	/**
 	 * Retry failed deployment
 	 * @param repositoryId
 	 * @param releaseId
