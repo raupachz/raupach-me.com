@@ -37,6 +37,7 @@ public class AccountBuilder {
 		planId(DOMUtils.getChildText(element, "plan-id"));
 		name(DOMUtils.getChildText(element, "name"));
 		thirdLevelDomain(DOMUtils.getChildText(element,"third-level-domain"));
+		timeZone(DOMUtils.getChildText(element, "time-zone"));
 		suspended(DOMUtils.getChildText(element, "suspended"));
 		createdAt(DOMUtils.getChildText(element, "created-at"));
 		updatedAt(DOMUtils.getChildText(element, "updated-at"));
@@ -71,6 +72,11 @@ public class AccountBuilder {
 	
 	public AccountBuilder name(String name) {
 		account.setName(name);
+		return this;
+	}
+	
+	public AccountBuilder timeZone(String timeZone) {
+		account.setTimeZone(timeZone);
 		return this;
 	}
 	

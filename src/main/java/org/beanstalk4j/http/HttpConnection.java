@@ -49,7 +49,7 @@ public class HttpConnection  {
 	
 	public InputStream doMethod(URL url, String method, String messageBody) {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine(">> HTTP GET " + url);
+			logger.fine(">> HTTP " + method + " " + url);
 			if (messageBody != null) {
 				String prettyMessageBody = XMLFormatter.prettyFormat(messageBody);
 				for (String line : prettyMessageBody.split("\\n")) {

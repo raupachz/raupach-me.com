@@ -26,16 +26,16 @@ class ByteBuffer {
 	
 	public ByteBuffer(InputStream is) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-		int n;
 		byte[] data = new byte[8192];
 
-		while ((n = is.read(data, 0, data.length)) != -1) {
+		for (int n; (n = is.read(data, 0, data.length)) != -1; ) {
 		  out.write(data, 0, n);
 		}
+		
 		out.flush();
-		is.close();
 		buffer = out.toByteArray();
+		out.close();
+		is.close();
 	}
 	
 	public byte[] getByteArray() {
