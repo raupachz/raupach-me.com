@@ -21,7 +21,6 @@ import org.beanstalk4j.model.ReleaseServer;
 import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.model.User;
-import org.omg.CORBA.INITIALIZE;
 
 /*
  * Copyright 2011 Björn Raupach
