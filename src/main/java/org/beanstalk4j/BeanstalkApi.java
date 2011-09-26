@@ -380,6 +380,7 @@ public class BeanstalkApi {
 	 * Find alle changesets
 	 * @return last 15 changesets from all repositories
 	 */
+	@Deprecated
 	public List<Changeset> getChangesets() {
 		URL url = httpConnection.createURL("/api/changesets.xml");
 		InputStream httpStream = httpConnection.doGet(url);
@@ -387,14 +388,56 @@ public class BeanstalkApi {
 	}
 	
 	/**
+	 * This method will return changesets from all repositories available to the currently logged in user.
+	 * @param page page number for pagination.
+	 * @param perPage number of elements per page (default 15, maximum 30);
+	 * @param orderField what column to use for ordering (default is time);
+	 * @param order order direction. Should be either ASC or DESC (default is DESC).
+	 * @return
+	 */
+	public List<Changeset> getChangesets(Integer page, Integer perPage, String orderField, String order) {
+		// TODO STUB
+		return null;
+	}
+	
+	/**
 	 * Find all changesets for a specific repository
 	 * @param repositoryId
 	 * @return
 	 */
+	@Deprecated
 	public List<Changeset> getChangesets(Integer repositoryId) {
 		URL url = httpConnection.createURL("/api/changesets/repository.xml?repository_id=" + repositoryId);
 		InputStream httpStream = httpConnection.doGet(url);
 		return resourceFactory.buildChangesets(httpStream);
+	}
+	
+	/**
+	 * Find all changesets for a specific repository
+	 * @param repositoryId
+	 * @param page
+	 * @param perPage
+	 * @param orderField
+	 * @param order
+	 * @return
+	 */
+	public List<Changeset> getChangesets(Integer repositoryId, Integer page, Integer perPage, String orderField, String order) {
+		// TODO STUB
+		return null;
+	}
+	
+	/**
+	 * Find all changesets for a specific repository
+	 * @param repositoryId
+	 * @param page
+	 * @param perPage
+	 * @param orderField
+	 * @param order
+	 * @return
+	 */
+	public List<Changeset> getChangesets(String repositoryName, Integer page, Integer perPage, String orderField, String order) {
+		// TODO STUB
+		return null;
 	}
 	
 	/**
