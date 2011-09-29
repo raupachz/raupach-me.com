@@ -1,7 +1,6 @@
 package org.beanstalk4j;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -9,6 +8,7 @@ import java.util.logging.Logger;
 
 import org.beanstalk4j.factory.ResourceFactory;
 import org.beanstalk4j.http.HttpConnection;
+import org.beanstalk4j.http.URLBuilder;
 import org.beanstalk4j.logging.DefaultFormatter;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
@@ -41,6 +41,7 @@ public class BeanstalkApi {
 	
 	private static Logger logger = Logger.getLogger("org.beanstalk4j");
 	
+	private final String host;
 	private final HttpConnection httpConnection;
 	private final ResourceFactory resourceFactory;
 	
@@ -51,7 +52,8 @@ public class BeanstalkApi {
 	  * @param password (required) 
 	  */
 	public BeanstalkApi(String accountName, String username, String password) {
-		this.httpConnection = new HttpConnection(accountName, username, password);
+		this.host = accountName + ".beanstalkapp.com";
+		this.httpConnection = new HttpConnection(username, password);
 		this.resourceFactory = new ResourceFactory();
 	}
 	
@@ -63,7 +65,8 @@ public class BeanstalkApi {
 	  * @param debug
 	  */
 	public BeanstalkApi(String accountName, String username, String password, boolean debug) {
-		this.httpConnection = new HttpConnection(accountName, username, password);
+		this.host = accountName + ".beanstalkapp.com";
+		this.httpConnection = new HttpConnection(username, password);
 		this.resourceFactory = new ResourceFactory();
 		if (debug) {
 			initializeLogging();
@@ -84,8 +87,8 @@ public class BeanstalkApi {
 	 * @return account details
 	 */
 	public Account getAccount() {
-		URL url = httpConnection.createURL("/api/account.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/account.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildAccount(httpStream);
 	}
 	
@@ -94,7 +97,7 @@ public class BeanstalkApi {
 	 * @param account
 	 */
 	public void updateAccount(Account account) {
-		URL url = httpConnection.createURL("/api/account.xml");
+		URLBuilder url = new URLBuilder(host, "/api/account.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<account>");
@@ -102,7 +105,7 @@ public class BeanstalkApi {
 		sb.append("<time-zone>").append(account.getTimeZone()).append("</time-zone>");
 		sb.append("</account>");
 		
-		httpConnection.doPut(url, sb.toString());
+		httpConnection.doPut(url.toURL(), sb.toString());
 	}
 	
 	/**
@@ -110,8 +113,8 @@ public class BeanstalkApi {
 	 * @return all plans
 	 */
 	public List<Plan> getPlans() {
-		URL url = httpConnection.createURL("/api/plans.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/plans.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildPlans(httpStream);
 	}
 	
@@ -120,8 +123,8 @@ public class BeanstalkApi {
 	 * @return all users
 	 */
 	public List<User> getUsers() {
-		URL url = httpConnection.createURL("/api/users.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/users.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildUsers(httpStream);
 	}
 	
@@ -131,8 +134,8 @@ public class BeanstalkApi {
 	 * @return single user
 	 */
 	public User getUser(Integer userId) {
-		URL url = httpConnection.createURL("/api/users/" + userId + ".xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/users/" + userId + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildUser(httpStream);
 	}
 	
@@ -141,8 +144,8 @@ public class BeanstalkApi {
 	 * @return currently logged in user
 	 */
 	public User getCurrentUser() {
-		URL url = httpConnection.createURL("/api/users/current.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/users/current.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildUser(httpStream);
 	}
 	
@@ -151,7 +154,7 @@ public class BeanstalkApi {
 	 * @param user
 	 */
 	public User createUser(User user, String password) {
-		URL url = httpConnection.createURL("/api/users.xml");
+		URLBuilder url = new URLBuilder(host, "/api/users.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<user>");
@@ -162,12 +165,12 @@ public class BeanstalkApi {
 		sb.append("<password>").append(password).append("</password>");
 		sb.append("</user>");
 
-		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		InputStream httpStream = httpConnection.doPost(url.toURL(), sb.toString());
 		return resourceFactory.buildUser(httpStream);
 	}
 	 
 	public void updateUser(User user) {
-		URL url = httpConnection.createURL("/api/users/" + user.getId() + ".xml");
+		URLBuilder url = new URLBuilder(host, "/api/users/" + user.getId() + ".xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<user>");
@@ -177,7 +180,7 @@ public class BeanstalkApi {
 		sb.append("<last-name>").append(user.getLastName()).append("<last-name>");
 		sb.append("</user>");
 		
-		httpConnection.doPut(url, sb.toString());
+		httpConnection.doPut(url.toURL(), sb.toString());
 	}
 	
 	/**
@@ -185,8 +188,8 @@ public class BeanstalkApi {
 	 * @param user
 	 */
 	public void deleteUser(User user) {
-		URL url = httpConnection.createURL("/api/users/" + user.getId() + ".xml");
-		httpConnection.doDelete(url);
+		URLBuilder url = new URLBuilder(host, "/api/users/" + user.getId() + ".xml");
+		httpConnection.doDelete(url.toURL());
 	}
 	
 	/**
@@ -194,8 +197,8 @@ public class BeanstalkApi {
 	 * @return current user's public keys
 	 */
 	public List<PublicKey> getPublicKeys() {
-		URL url = httpConnection.createURL("/api/public_keys.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/public_keys.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildPublicKeys(httpStream);
 	}
 	
@@ -204,8 +207,8 @@ public class BeanstalkApi {
 	 * @return public key
 	 */
 	public PublicKey getPublicKey(Integer id) {
-		URL url = httpConnection.createURL("/api/public_keys/" + id + ".xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/public_keys/" + id + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildPublicKey(httpStream);
 	}
 	
@@ -215,14 +218,14 @@ public class BeanstalkApi {
 	 * @return created public key
 	 */
 	public PublicKey createPublicKey(String content) {
-		URL url = httpConnection.createURL("/api/public_keys.xml");
+		URLBuilder url = new URLBuilder(host, "/api/public_keys.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<public-key>");
 		sb.append("<content>").append(content).append("</content>");
 		sb.append("</public-key>");
 		
-		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		InputStream httpStream = httpConnection.doPost(url.toURL(), sb.toString());
 		return resourceFactory.buildPublicKey(httpStream);
 	}
 	
@@ -233,14 +236,14 @@ public class BeanstalkApi {
 	 * @return created public key
 	 */
 	public PublicKey createPublicKey(Integer userId, String content) {
-		URL url = httpConnection.createURL("/api/public_keys.xml?user_id=" + userId);
+		URLBuilder url = new URLBuilder(host, "/api/public_keys.xml").addParameter("user_id", userId);
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<public-key>");
 		sb.append("<content>").append(content).append("</content>");
 		sb.append("</public-key>");
 		
-		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		InputStream httpStream = httpConnection.doPost(url.toURL(), sb.toString());
 		return resourceFactory.buildPublicKey(httpStream);
 	}
 	
@@ -249,7 +252,7 @@ public class BeanstalkApi {
 	 * @param publicKey
 	 */
 	public void updatePublicKey(PublicKey publicKey) {
-		URL url = httpConnection.createURL("/api/public_keys/" + publicKey.getId() + ".xml");
+		URLBuilder url = new URLBuilder(host, "/api/public_keys/" + publicKey.getId() + ".xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<public-key>");
@@ -259,15 +262,15 @@ public class BeanstalkApi {
 		sb.append("<content>").append(publicKey.getContent()).append("</content>");
 		sb.append("</public-key>");
 		
-		httpConnection.doPut(url, sb.toString());
+		httpConnection.doPut(url.toURL(), sb.toString());
 	}
 	
 	/**
 	 * Delete public Key
 	 */
 	public void deletePublicKey(PublicKey publicKey) {
-		URL url = httpConnection.createURL("/api/public_keys/" + publicKey.getId() + ".xml");
-		httpConnection.doDelete(url);
+		URLBuilder url = new URLBuilder(host, "/api/public_keys/" + publicKey.getId() + ".xml");
+		httpConnection.doDelete(url.toURL());
 	}
 	
 	/**
@@ -275,8 +278,22 @@ public class BeanstalkApi {
 	 * @return all repositories
 	 */
 	public List<Repository> getRepositories() {
-		URL url = httpConnection.createURL("/api/repositories.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/repositories.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
+		return resourceFactory.buildRepositories(httpStream);
+	}
+	
+	/**
+	 * Find all repositories
+	 * @param page
+	 * @param numberPerPage
+	 * @return all repositories
+	 */
+	public List<Repository> getRepositories(int page, int numberPerPage) {
+		URLBuilder sb = new URLBuilder("beanstalk-php-api.beanstalkapp.com", "/api/repositories.xml")
+			.addParameter("page", 1)
+			.addParameter("per_page", numberPerPage);
+		InputStream httpStream = httpConnection.doGet(sb.toURL());
 		return resourceFactory.buildRepositories(httpStream);
 	}
 	
@@ -286,8 +303,8 @@ public class BeanstalkApi {
 	 * @return repository
 	 */
 	public Repository getRepository(Integer repositoryId) {
-		URL url = httpConnection.createURL("/api/repositories/" + repositoryId + ".xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/repositories/" + repositoryId + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildRepository(httpStream);
 	}
 	
@@ -297,8 +314,8 @@ public class BeanstalkApi {
 	 * @return repository
 	 */
 	public Repository getRepository(String name) {
-		URL url = httpConnection.createURL("/api/repositories/" + name + ".xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/repositories/" + name + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildRepository(httpStream);
 	}
 	
@@ -309,7 +326,7 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public Repository createRepository(String name, String title, ColorLabel colorLabel) {
-		URL url = httpConnection.createURL("/api/repositories.xml");
+		URLBuilder url = new URLBuilder(host, "/api/repositories.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<repository>");
@@ -318,7 +335,7 @@ public class BeanstalkApi {
 		sb.append("<color-label>").append(colorLabel).append("</color-label>");
 		sb.append("</repository>");
 		
-		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		InputStream httpStream = httpConnection.doPost(url.toURL(), sb.toString());
 		return resourceFactory.buildRepository(httpStream);
 	}
 	
@@ -327,7 +344,7 @@ public class BeanstalkApi {
 	 * @param repository
 	 */
 	public void updateRepository(Repository repository) {
-		URL url = httpConnection.createURL("/api/repositories/" + repository.getId() + ".xml");
+		URLBuilder url = new URLBuilder(host, "/api/repositories/" + repository.getId() + ".xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<repository>");
@@ -336,14 +353,14 @@ public class BeanstalkApi {
 		sb.append("<color-label>").append(repository.getColorLabel()).append("</color-label>");
 		sb.append("</repository>");
 		
-		httpConnection.doPut(url, sb.toString());
+		httpConnection.doPut(url.toURL(), sb.toString());
 	}
 	/**
 	 * Find permissions for user
 	 */
 	public List<Permission> getPermissions(Integer userId) {
-		URL url = httpConnection.createURL("/api/permissions/" + userId + ".xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/permissions/" + userId + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildPermissions(httpStream);
 	}
 	
@@ -353,7 +370,7 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public Permission createPermission(Permission permission) {
-		URL url = httpConnection.createURL("/api/permissions.xml");
+		URLBuilder url = new URLBuilder(host, "/api/permissions.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<permission>");
@@ -363,7 +380,7 @@ public class BeanstalkApi {
 		sb.append("<server-environment-id>").append(permission.getServerEnvironmentId()).append("</server-environment-id>");
 		sb.append("</permission>");
 		
-		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		InputStream httpStream = httpConnection.doPost(url.toURL(), sb.toString());
 		return resourceFactory.buildPermission(httpStream);
 	}
 	
@@ -372,8 +389,8 @@ public class BeanstalkApi {
 	 * @param permission
 	 */
 	public void deletePermission(Permission permission) {
-		URL url = httpConnection.createURL("/api/permissions/" + permission.getId() + ".xml");
-		httpConnection.doDelete(url);
+		URLBuilder url = new URLBuilder(host, "/api/permissions/" + permission.getId() + ".xml");
+		httpConnection.doDelete(url.toURL());
 	}
 	
 	/**
@@ -382,8 +399,8 @@ public class BeanstalkApi {
 	 */
 	@Deprecated
 	public List<Changeset> getChangesets() {
-		URL url = httpConnection.createURL("/api/changesets.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/changesets.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildChangesets(httpStream);
 	}
 	
@@ -396,8 +413,9 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<Changeset> getChangesets(Integer page, Integer perPage, String orderField, String order) {
-		// TODO STUB
-		return null;
+		URLBuilder url = new URLBuilder(host, "/api/changesets.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
+		return resourceFactory.buildChangesets(httpStream);
 	}
 	
 	/**
@@ -407,8 +425,9 @@ public class BeanstalkApi {
 	 */
 	@Deprecated
 	public List<Changeset> getChangesets(Integer repositoryId) {
-		URL url = httpConnection.createURL("/api/changesets/repository.xml?repository_id=" + repositoryId);
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/changesets/repository.xml")
+								.addParameter("repositoryId", repositoryId);
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildChangesets(httpStream);
 	}
 	
@@ -446,8 +465,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<Changeset> getChangesets(String name) {
-		URL url = httpConnection.createURL("/api/changesets/repository.xml?repository_id=" + name);
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/changesets/repository.xml").addParameter("repository_id", name);
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildChangesets(httpStream);
 	}
 	
@@ -458,8 +477,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public Changeset getChangeset(Integer repositoryId, Integer revision) {
-		URL url = httpConnection.createURL("/api/changesets/" + revision + ".xml?repository_id=" + repositoryId);
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/changesets/" + revision + ".xml").addParameter("repository_id", repositoryId);
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildChangeset(httpStream);
 	}
 	
@@ -470,8 +489,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public Changeset getChangeset(String name, Integer revision) {
-		URL url = httpConnection.createURL("/api/changesets/" + revision + ".xml?repository_id=" + revision);
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/changesets/" + revision + ".xml").addParameter("repository_id", name);
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildChangeset(httpStream);
 	}
 	
@@ -481,8 +500,8 @@ public class BeanstalkApi {
 	 * @return all comments
 	 */
 	public List<Comment> getComments(Integer repositoryId) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/comments.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/comments.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildComments(httpStream);
 	}
 	
@@ -492,8 +511,8 @@ public class BeanstalkApi {
 	 * @return all comments
 	 */
 	public List<Comment> getComments(String repositoryName) {
-		URL url = httpConnection.createURL("/api/" + repositoryName + "/comments.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryName + "/comments.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildComments(httpStream);
 	}
 	
@@ -504,8 +523,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<Comment> getComments(Integer repositoryId, String revision) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/comments.xml?revision=" + revision);
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/comments.xml").addParameter("revision", revision);
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildComments(httpStream);
 	}
 	
@@ -516,8 +535,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<Comment> getComments(String repositoryName, String revision) {
-		URL url = httpConnection.createURL("/api/" + repositoryName + "/comments.xml?revision=" + revision);
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryName + "/comments.xml").addParameter("revision", revision);
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildComments(httpStream);
 	}
 	
@@ -527,8 +546,8 @@ public class BeanstalkApi {
 	 * @return single comment
 	 */
 	public Comment getComment(Integer repositoryId, Integer id) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/comments/" + id + ".xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/comments/" + id + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildComment(httpStream);
 	}
 	
@@ -539,8 +558,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public Comment getComment(String repositoryName, Integer id) {
-		URL url = httpConnection.createURL("/api/" + repositoryName + "/comments/" + id + ".xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryName + "/comments/" + id + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildComment(httpStream);
 	}
 	
@@ -551,7 +570,7 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public Comment createComment(Integer repositoryId, Comment comment) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/comments.xml");
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/comments.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<comment>");
@@ -561,7 +580,7 @@ public class BeanstalkApi {
 		sb.append("<line-number>").append(comment.getLineNumber()).append("</line-number>");
 		sb.append("</comment>");
 		
-		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		InputStream httpStream = httpConnection.doPost(url.toURL(), sb.toString());
 		return resourceFactory.buildComment(httpStream);
 	}
 	
@@ -572,14 +591,14 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public ServerEnvironment createServerEnvironment(Integer repositoryId, String name) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/server_environments.xml");
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/server_environments.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<server-environment>");
 		sb.append("</name>").append(name).append("</name>");
 		sb.append("</server-environment>");
 		
-		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		InputStream httpStream = httpConnection.doPost(url.toURL(), sb.toString());
 		return resourceFactory.buildServerEnvironment(httpStream);
 	}
 	
@@ -591,7 +610,7 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public ServerEnvironment createServerEnvironment(Integer repositoryId, String name, String branchName) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/server_environments.xml");
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/server_environments.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<server-environment>");
@@ -599,7 +618,7 @@ public class BeanstalkApi {
 		sb.append("</branch-name>").append(name).append("</branch-name>");
 		sb.append("</server-environment>");
 		
-		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		InputStream httpStream = httpConnection.doPost(url.toURL(), sb.toString());
 		return resourceFactory.buildServerEnvironment(httpStream);
 	}
 	
@@ -608,7 +627,7 @@ public class BeanstalkApi {
 	 * @param serverEnvironment
 	 */
 	public void updateServerEnvironment(ServerEnvironment serverEnvironment) {
-		URL url = httpConnection.createURL("/api/" + serverEnvironment.getRepositoryId() + "/server_environments/" + serverEnvironment.getId() + ".xml");
+		URLBuilder url = new URLBuilder(host, "/api/" + serverEnvironment.getRepositoryId() + "/server_environments/" + serverEnvironment.getId() + ".xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<server-environment>");
@@ -617,7 +636,7 @@ public class BeanstalkApi {
 		sb.append("<branch-name>").append(serverEnvironment.getBranchName()).append("</branch-name>");
 		sb.append("</server-environment>");
 		
-		httpConnection.doPut(url, sb.toString());
+		httpConnection.doPut(url.toURL(), sb.toString());
 	}
 	
 	/**
@@ -626,8 +645,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<ServerEnvironment> getServerEnvironments(Integer repositoryId) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/server_environments.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/server_environments.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildServerEnvironments(httpStream);
 	}
 	
@@ -638,8 +657,8 @@ public class BeanstalkApi {
 	 * @return single Server Environment
 	 */
 	public ServerEnvironment getServerEnvironment(Integer repositoryId, Integer id) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/server_environments/" + id + ".xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/server_environments/" + id + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildServerEnvironment(httpStream);
 	}
 	
@@ -650,8 +669,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public ServerEnvironment getServerEnvironment(Integer repositoryId, String name) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/server_environments/" + name + ".xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/server_environments/" + name + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildServerEnvironment(httpStream);
 	}
 	
@@ -662,8 +681,8 @@ public class BeanstalkApi {
 	 * @return all release servers
 	 */
 	public List<ReleaseServer> getReleaseServers(Integer repositoryId, Integer environmentId) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/release_servers.xml?environment_id=" + environmentId);
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/release_servers.xml").addParameter("environment_id", environmentId);
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildReleaseServers(httpStream);
 	}
 	
@@ -674,8 +693,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public ReleaseServer getReleaseServer(Integer repositoryId, Integer releaseServerId) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/release_servers/" + repositoryId + ".xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/release_servers/" + repositoryId + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildReleaseServer(httpStream);
 	}
 	
@@ -694,7 +713,7 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public ReleaseServer createReleaseServer(Integer repositoryId, Integer environmentId, String name, String localPath, String remotePath, String remoteAddr, String protocol, Integer port, String login, String password) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/release_servers.xml?environment_id=" + environmentId);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/release_servers.xml").addParameter("environment_id", environmentId);
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<release-server>");
@@ -708,7 +727,7 @@ public class BeanstalkApi {
 		sb.append("<password>").append(password).append("</password>");
 		sb.append("</release-server>");
 		
-		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		InputStream httpStream = httpConnection.doPost(url.toURL(), sb.toString());
 		return resourceFactory.buildReleaseServer(httpStream);
 	}
 	
@@ -717,7 +736,7 @@ public class BeanstalkApi {
 	 * @param releaseServer
 	 */
 	public void updateReleaseServer(ReleaseServer releaseServer) {
-		URL url = httpConnection.createURL("/api/" + releaseServer.getRepositoryId() + "/release_servers/" + releaseServer.getId());
+		URLBuilder url = new URLBuilder(host, "/api/" + releaseServer.getRepositoryId() + "/release_servers/" + releaseServer.getId());
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<release-server>");
@@ -731,7 +750,7 @@ public class BeanstalkApi {
 		sb.append("<password>").append(releaseServer.getPassword()).append("</password>");
 		sb.append("</release-server>");
 		
-		httpConnection.doPut(url, sb.toString());
+		httpConnection.doPut(url.toURL(), sb.toString());
 	}
 	
 	/**
@@ -739,8 +758,8 @@ public class BeanstalkApi {
 	 * @param releaseServer
 	 */
 	public void deleteReleaseServer(ReleaseServer releaseServer) {
-		URL url = httpConnection.createURL("/api/" + releaseServer.getRepositoryId() + "/release_servers/" + releaseServer.getId() + ".xml");
-		httpConnection.doDelete(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + releaseServer.getRepositoryId() + "/release_servers/" + releaseServer.getId() + ".xml");
+		httpConnection.doDelete(url.toURL());
 	}
 	
 	/**
@@ -748,8 +767,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<Release> getReleases() {
-		URL url = httpConnection.createURL("/api/releases.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/releases.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildReleases(httpStream);
 	}
 	
@@ -759,8 +778,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<Release> getReleases(Integer repositoryId) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/releases.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/releases.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildReleases(httpStream);
 	}
 	
@@ -770,8 +789,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<Release> getReleases(String repositoryName) {
-		URL url = httpConnection.createURL("/api/" + repositoryName + "/releases.xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryName + "/releases.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildReleases(httpStream);
 	}
 	
@@ -782,8 +801,8 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public Release getRelease(Integer repositoryId, Integer releaseId) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/releases/" + releaseId + ".xml");
-		InputStream httpStream = httpConnection.doGet(url);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/releases/" + releaseId + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildRelease(httpStream);
 	}
 	
@@ -791,7 +810,7 @@ public class BeanstalkApi {
 	 * Create a new release
 	 */
 	public Release createRelease(Integer repositoryId, Integer environmentId, String revision, String comment) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/releases.xml?environment_id=" + environmentId);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/releases.xml").addParameter("environment_id", environmentId);
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<release>");
@@ -801,7 +820,7 @@ public class BeanstalkApi {
 		}
 		sb.append("</revision>");
 
-		InputStream httpStream = httpConnection.doPost(url, sb.toString());
+		InputStream httpStream = httpConnection.doPost(url.toURL(), sb.toString());
 		return resourceFactory.buildRelease(httpStream);
 	}
 	
@@ -811,8 +830,8 @@ public class BeanstalkApi {
 	 * @param releaseId
 	 */
 	public void retryFailedRelease(Integer repositoryId, Integer releaseId) {
-		URL url = httpConnection.createURL("/api/" + repositoryId + "/releases/" + releaseId + "/retry.xml");
-		httpConnection.doPut(url, null);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/releases/" + releaseId + "/retry.xml");
+		httpConnection.doPut(url.toURL(), null);
 	}
 	
 	/**
@@ -821,8 +840,8 @@ public class BeanstalkApi {
 	 * @param releaseId
 	 */
 	public void retryFailedRelease(String repositoryName, Integer releaseId) {
-		URL url = httpConnection.createURL("/api/" + repositoryName + "/releases/" + releaseId + "/retry.xml");
-		httpConnection.doPut(url, null);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryName + "/releases/" + releaseId + "/retry.xml");
+		httpConnection.doPut(url.toURL(), null);
 	}
 	
 }

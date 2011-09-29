@@ -46,7 +46,12 @@ public class ToStringBuilder {
     }
 
     public ToStringBuilder append(String fieldName, Object value) {
-        return append(fieldName, value.toString());
+    	if (value == null) {
+    		return append(fieldName, "nil");
+    	} else {
+    		return append(fieldName, value.toString());
+    	}
+        
     }
 
     public ToStringBuilder append(String fieldName, String value) {

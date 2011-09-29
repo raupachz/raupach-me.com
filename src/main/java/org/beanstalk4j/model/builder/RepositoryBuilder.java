@@ -95,7 +95,11 @@ public class RepositoryBuilder {
 	}
 	
 	public RepositoryBuilder revision(String revision) {
-		return revision(Integer.valueOf(revision));
+		if (revision == null) {
+			return null;
+		} else {
+			return revision(Integer.valueOf(revision));
+		}
 	}
 	
 	public RepositoryBuilder storageUsedBytes(Integer storageBytesUsed) {

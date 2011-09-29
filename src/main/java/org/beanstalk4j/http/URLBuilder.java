@@ -34,7 +34,7 @@ public class URLBuilder {
 		this.parameters = new LinkedList<URLBuilder.KeyValuePair>();
 	}
 	
-	public URLBuilder addParameter(KeyValuePair parameter) {
+	private URLBuilder addParameter(KeyValuePair parameter) {
 		parameters.add(parameter);
 		return this;
 	}
@@ -51,6 +51,8 @@ public class URLBuilder {
 		String query = sb.toString();
 		if (!query.isEmpty()) {
 			query = query.substring(0, query.length() - 1); // chop last &
+		} else {
+			query = null;
 		}
 		
 		URI uri = null;

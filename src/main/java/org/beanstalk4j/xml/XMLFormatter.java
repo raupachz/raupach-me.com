@@ -28,6 +28,9 @@ import javax.xml.transform.stream.StreamSource;
 public class XMLFormatter {
 	
 	public static String prettyFormat(String input) {
+		if (input == null || input.trim().isEmpty()) {
+			return "";
+		}
 	    try {
 	        Source xmlInput = new StreamSource(new StringReader(input));
 	        StringWriter stringWriter = new StringWriter();

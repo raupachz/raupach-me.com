@@ -3,7 +3,6 @@ package org.beanstalk4j.http;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,25 +26,18 @@ import org.beanstalk4j.xml.XMLFormatter;
    limitations under the License.
  */
 public class HttpConnection  {
+	
+	public static final int STATUS_CODE_OK = 200;
+	public static final int STATUS_CODE_CREATED = 201;
 
 	private static Logger logger = Logger.getLogger("org.beanstalk4j");
 	
-	private final String host;
 	private final String credentials;
 
-	public HttpConnection(String accountName, String username, String password) {
-		this.host = accountName + ".beanstalkapp.com";
+	public HttpConnection(String username, String password) {
 		this.credentials = Base64Coder.encodeString(username + ":" + password);
 	}
 
-	public URL createURL(String path) {
-		try {
-			return new URL("https", host, path);
-		} catch (MalformedURLException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
 	public InputStream doGet(URL url) {
 		return doMethod(url, "GET", null);
 	}
@@ -88,6 +80,17 @@ public class HttpConnection  {
 			int responseCode = con.getResponseCode();
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("<< HTTP Status-Code " + responseCode);
+			}
+			if (!(responseCode == STATUS_CODE_OK || responseCode == STATUS_CODE_CREATED)) {
+				ByteBuffer buffer = new ByteBuffer(con.getErrorStream());
+				if (logger.isLoggable(Level.FINE)) {
+					String response = new String(buffer.getByteArray(), "utf-8");
+					String prettyMessageBody = XMLFormatter.prettyFormat(response);
+					for (String line : prettyMessageBody.split("\\n")) {
+						logger.fine("<< HTTP " + line);
+					}
+				}
+				return null;
 			}
 			if (method.equalsIgnoreCase("PUT") || method.equalsIgnoreCase("DELETE")) {
 				return null;
