@@ -7,6 +7,8 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import org.beanstalk4j.utils.Base64Coder;
 import org.beanstalk4j.xml.XMLFormatter;
 
@@ -27,9 +29,6 @@ import org.beanstalk4j.xml.XMLFormatter;
  */
 public class HttpConnection  {
 	
-	public static final int STATUS_CODE_OK = 200;
-	public static final int STATUS_CODE_CREATED = 201;
-
 	private static Logger logger = Logger.getLogger("org.beanstalk4j");
 	
 	private final String credentials;
@@ -81,7 +80,7 @@ public class HttpConnection  {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("<< HTTP Status-Code " + responseCode);
 			}
-			if (!(responseCode == STATUS_CODE_OK || responseCode == STATUS_CODE_CREATED)) {
+			if (!(responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED)) {
 				ByteBuffer buffer = new ByteBuffer(con.getErrorStream());
 				if (logger.isLoggable(Level.FINE)) {
 					String response = new String(buffer.getByteArray(), "utf-8");
