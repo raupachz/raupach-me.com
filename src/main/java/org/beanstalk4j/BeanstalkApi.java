@@ -169,6 +169,10 @@ public class BeanstalkApi {
 		return resourceFactory.buildUser(httpStream);
 	}
 	 
+	/**
+	 * Update existing user
+	 * @param user
+	 */
 	public void updateUser(User user) {
 		URLBuilder url = new URLBuilder(host, "/api/users/" + user.getId() + ".xml");
 		
@@ -236,7 +240,7 @@ public class BeanstalkApi {
 	 * @return created public key
 	 */
 	public PublicKey createPublicKey(Integer userId, String content) {
-		URLBuilder url = new URLBuilder(host, "/api/public_keys.xml").addParameter("user_id", userId);
+		URLBuilder url = new URLBuilder(host, "/api/public_keys.xml").addFieldValuePair("user_id", userId);
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<public-key>");
@@ -277,6 +281,7 @@ public class BeanstalkApi {
 	 * Find all repositories
 	 * @return all repositories
 	 */
+	@Deprecated
 	public List<Repository> getRepositories() {
 		URLBuilder url = new URLBuilder(host, "/api/repositories.xml");
 		InputStream httpStream = httpConnection.doGet(url.toURL());
@@ -285,14 +290,14 @@ public class BeanstalkApi {
 	
 	/**
 	 * Find all repositories
-	 * @param page
-	 * @param numberPerPage
+	 * @param page optional -  page number for pagination
+	 * @param numberPerPage optional - number of elements per page (default 30, maximum 50)
 	 * @return all repositories
 	 */
-	public List<Repository> getRepositories(int page, int numberPerPage) {
+	public List<Repository> getRepositories(Integer page, Integer numberPerPage) {
 		URLBuilder sb = new URLBuilder("beanstalk-php-api.beanstalkapp.com", "/api/repositories.xml")
-			.addParameter("page", 1)
-			.addParameter("per_page", numberPerPage);
+			.addFieldValuePair("page", page)
+			.addFieldValuePair("per_page", numberPerPage);
 		InputStream httpStream = httpConnection.doGet(sb.toURL());
 		return resourceFactory.buildRepositories(httpStream);
 	}
@@ -413,7 +418,11 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<Changeset> getChangesets(Integer page, Integer perPage, String orderField, String order) {
-		URLBuilder url = new URLBuilder(host, "/api/changesets.xml");
+		URLBuilder url = new URLBuilder(host, "/api/changesets.xml")
+								.addFieldValuePair("page", page)
+								.addFieldValuePair("per_page", perPage)
+								.addFieldValuePair("order_field", orderField)
+								.addFieldValuePair("order", order);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildChangesets(httpStream);
 	}
@@ -425,8 +434,7 @@ public class BeanstalkApi {
 	 */
 	@Deprecated
 	public List<Changeset> getChangesets(Integer repositoryId) {
-		URLBuilder url = new URLBuilder(host, "/api/changesets/repository.xml")
-								.addParameter("repositoryId", repositoryId);
+		URLBuilder url = new URLBuilder(host, "/api/changesets/repository.xml").addFieldValuePair("repository_id", repositoryId);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildChangesets(httpStream);
 	}
@@ -441,8 +449,14 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<Changeset> getChangesets(Integer repositoryId, Integer page, Integer perPage, String orderField, String order) {
-		// TODO STUB
-		return null;
+		URLBuilder url = new URLBuilder(host, "/api/changesets/repository.xml")
+								.addFieldValuePair("repository_id", repositoryId)
+								.addFieldValuePair("page", page)
+								.addFieldValuePair("per_page", perPage)
+								.addFieldValuePair("order_field", orderField)
+								.addFieldValuePair("order", order);
+		InputStream httpStream = httpConnection.doGet(url.toURL());
+		return resourceFactory.buildChangesets(httpStream);
 	}
 	
 	/**
@@ -455,17 +469,24 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<Changeset> getChangesets(String repositoryName, Integer page, Integer perPage, String orderField, String order) {
-		// TODO STUB
-		return null;
+		URLBuilder url = new URLBuilder(host, "/api/changesets/repository.xml")
+				.addFieldValuePair("repository_id", repositoryName)
+				.addFieldValuePair("page", page)
+				.addFieldValuePair("per_page", perPage)
+				.addFieldValuePair("order_field", orderField)
+				.addFieldValuePair("order", order);
+				InputStream httpStream = httpConnection.doGet(url.toURL());
+		return resourceFactory.buildChangesets(httpStream);
 	}
 	
 	/**
 	 * Finds all changesets for a specific repository
-	 * @param name of the repository
+	 * @param repositoryName of the repository
 	 * @return
 	 */
-	public List<Changeset> getChangesets(String name) {
-		URLBuilder url = new URLBuilder(host, "/api/changesets/repository.xml").addParameter("repository_id", name);
+	@Deprecated
+	public List<Changeset> getChangesets(String repositoryName) {
+		URLBuilder url = new URLBuilder(host, "/api/changesets/repository.xml").addFieldValuePair("repository_id", repositoryName);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildChangesets(httpStream);
 	}
@@ -477,7 +498,7 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public Changeset getChangeset(Integer repositoryId, Integer revision) {
-		URLBuilder url = new URLBuilder(host, "/api/changesets/" + revision + ".xml").addParameter("repository_id", repositoryId);
+		URLBuilder url = new URLBuilder(host, "/api/changesets/" + revision + ".xml").addFieldValuePair("repository_id", repositoryId);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildChangeset(httpStream);
 	}
@@ -485,11 +506,11 @@ public class BeanstalkApi {
 	/**
 	 * Find a single changeset
 	 * @param repositoryId
-	 * @param name
+	 * @param repositoryName
 	 * @return
 	 */
-	public Changeset getChangeset(String name, Integer revision) {
-		URLBuilder url = new URLBuilder(host, "/api/changesets/" + revision + ".xml").addParameter("repository_id", name);
+	public Changeset getChangeset(String repositoryName, Integer revision) {
+		URLBuilder url = new URLBuilder(host, "/api/changesets/" + revision + ".xml").addFieldValuePair("repository_id", repositoryName);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildChangeset(httpStream);
 	}
@@ -523,7 +544,7 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<Comment> getComments(Integer repositoryId, String revision) {
-		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/comments.xml").addParameter("revision", revision);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/comments.xml").addFieldValuePair("revision", revision);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildComments(httpStream);
 	}
@@ -535,7 +556,7 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public List<Comment> getComments(String repositoryName, String revision) {
-		URLBuilder url = new URLBuilder(host, "/api/" + repositoryName + "/comments.xml").addParameter("revision", revision);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryName + "/comments.xml").addFieldValuePair("revision", revision);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildComments(httpStream);
 	}
@@ -681,7 +702,7 @@ public class BeanstalkApi {
 	 * @return all release servers
 	 */
 	public List<ReleaseServer> getReleaseServers(Integer repositoryId, Integer environmentId) {
-		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/release_servers.xml").addParameter("environment_id", environmentId);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/release_servers.xml").addFieldValuePair("environment_id", environmentId);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildReleaseServers(httpStream);
 	}
@@ -713,7 +734,7 @@ public class BeanstalkApi {
 	 * @return
 	 */
 	public ReleaseServer createReleaseServer(Integer repositoryId, Integer environmentId, String name, String localPath, String remotePath, String remoteAddr, String protocol, Integer port, String login, String password) {
-		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/release_servers.xml").addParameter("environment_id", environmentId);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/release_servers.xml").addFieldValuePair("environment_id", environmentId);
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<release-server>");
@@ -810,7 +831,7 @@ public class BeanstalkApi {
 	 * Create a new release
 	 */
 	public Release createRelease(Integer repositoryId, Integer environmentId, String revision, String comment) {
-		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/releases.xml").addParameter("environment_id", environmentId);
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/releases.xml").addFieldValuePair("environment_id", environmentId);
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<release>");

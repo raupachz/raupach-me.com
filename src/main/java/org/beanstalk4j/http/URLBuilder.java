@@ -26,33 +26,39 @@ public class URLBuilder {
 	
 	private final String host;
 	private final String path;
-	private final List<KeyValuePair> parameters;
+	private final List<FieldValuePair> fieldValuePairs;
 	
 	public URLBuilder(String host, String path) {
 		this.host = host;
 		this.path = path;
-		this.parameters = new LinkedList<URLBuilder.KeyValuePair>();
+		this.fieldValuePairs = new LinkedList<URLBuilder.FieldValuePair>();
 	}
 	
-	private URLBuilder addParameter(KeyValuePair parameter) {
-		parameters.add(parameter);
+	public URLBuilder addFieldValuePair(String field, Object value) {
+		if (value != null) {
+			return addFieldValuePair(new FieldValuePair(field, value));
+		} else {
+			return this;
+		}
+	}
+	
+	private URLBuilder addFieldValuePair(FieldValuePair fieldValuePair) {
+		fieldValuePairs.add(fieldValuePair);
 		return this;
 	}
 	
-	public URLBuilder addParameter(String name, Object value) {
-		return addParameter(new KeyValuePair(name, value));
-	}
-	
 	public URI toURI() {
-		StringBuilder sb = new StringBuilder();
-		for (KeyValuePair pair : parameters) {
-			sb.append(pair).append("&");
-		}
-		String query = sb.toString();
-		if (!query.isEmpty()) {
-			query = query.substring(0, query.length() - 1); // chop last &
-		} else {
-			query = null;
+		String query = null;
+		if (!fieldValuePairs.isEmpty()) {
+			StringBuilder sb = new StringBuilder();
+			for (FieldValuePair pair : fieldValuePairs) {
+				sb.append(pair.getField())
+					.append("=")
+					.append(pair.getValue())
+					.append("&");
+			}
+			sb.deleteCharAt(sb.length()-1); // chop last ampersand
+			query = sb.toString();
 		}
 		
 		URI uri = null;
@@ -72,18 +78,18 @@ public class URLBuilder {
 		}
 	}
 	
-	public class KeyValuePair {
+	public class FieldValuePair {
 		
-		final String name;
+		final String field;
 		final Object value;
 		
-		public KeyValuePair(String name, Object value) {
-			this.name = name;
+		public FieldValuePair(String field, Object value) {
+			this.field = field;
 			this.value = value;
 		}
 		
-		public String getName() {
-			return name;
+		public String getField() {
+			return field;
 		}
 		
 		public Object getValue() {
@@ -91,7 +97,7 @@ public class URLBuilder {
 		}
 		
 		public String toString() {
-			return name + "=" + value;
+			return field + "=" + value;
 		}
 		
 	}
