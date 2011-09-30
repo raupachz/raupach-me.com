@@ -520,8 +520,10 @@ public class BeanstalkApi {
 	 * @param repositoryId Id of the repository
 	 * @return all comments
 	 */
-	public List<Comment> getComments(Integer repositoryId) {
-		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/comments.xml");
+	public List<Comment> getComments(Integer repositoryId, Integer page, Integer perPage) {
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/comments.xml")
+								.addFieldValuePair("page", page)
+								.addFieldValuePair("per_page", perPage);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildComments(httpStream);
 	}
@@ -531,8 +533,10 @@ public class BeanstalkApi {
 	 * @param reposioryName of the repository
 	 * @return all comments
 	 */
-	public List<Comment> getComments(String repositoryName) {
-		URLBuilder url = new URLBuilder(host, "/api/" + repositoryName + "/comments.xml");
+	public List<Comment> getComments(String repositoryName, Integer page, Integer perPage) {
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryName + "/comments.xml")
+								.addFieldValuePair("page", page)
+								.addFieldValuePair("per_page", perPage);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildComments(httpStream);
 	}
@@ -543,8 +547,11 @@ public class BeanstalkApi {
 	 * @param revision
 	 * @return
 	 */
-	public List<Comment> getComments(Integer repositoryId, String revision) {
-		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/comments.xml").addFieldValuePair("revision", revision);
+	public List<Comment> getComments(Integer repositoryId, String revision, Integer page, Integer perPage) {
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/comments.xml")
+								.addFieldValuePair("revision", revision)
+								.addFieldValuePair("page", page)
+								.addFieldValuePair("per_page", perPage);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildComments(httpStream);
 	}
@@ -555,8 +562,24 @@ public class BeanstalkApi {
 	 * @param revision
 	 * @return
 	 */
-	public List<Comment> getComments(String repositoryName, String revision) {
-		URLBuilder url = new URLBuilder(host, "/api/" + repositoryName + "/comments.xml").addFieldValuePair("revision", revision);
+	public List<Comment> getComments(String repositoryName, String revision, Integer page, Integer perPage) {
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryName + "/comments.xml")
+								.addFieldValuePair("revision", revision)
+								.addFieldValuePair("page", page)
+								.addFieldValuePair("per_page", perPage);
+		InputStream httpStream = httpConnection.doGet(url.toURL());
+		return resourceFactory.buildComments(httpStream);
+	}
+	
+	/**
+	 * Find all comments for a specific user
+	 * @param user
+	 * @param page
+	 * @param perPage
+	 * @return
+	 */
+	public List<Comment> getComments(User user, Integer page, Integer perPage) {
+		URLBuilder url = new URLBuilder(host, "/api/comments/user.xml").addFieldValuePair("user_id", user.getId());
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildComments(httpStream);
 	}
