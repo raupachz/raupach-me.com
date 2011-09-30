@@ -21,8 +21,8 @@
 	</licenses>
 	<scm>
 		<connection>scm:svn:http://beanstalk4j.googlecode.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://beanstalk4j.googlecode.com/trunk/</developerConnection>
-		<url>http://beanstalk4j.googlecode.com/svn/trunk.</url>
+		<developerConnection>scm:svn:https://beanstalk4j.googlecode.com/svn/trunk/</developerConnection>
+		<url>http://beanstalk4j.googlecode.com/svn/trunk/</url>
 	</scm>
 	<developers>
 		<developer>
