@@ -1,5 +1,6 @@
 package org.beanstalk4j.http;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -7,7 +8,9 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.beanstalk4j.ApiException;
 import org.beanstalk4j.utils.Base64Coder;
+import org.beanstalk4j.xml.DOMUtils;
 import org.beanstalk4j.xml.XMLFormatter;
 
 /*
@@ -52,16 +55,7 @@ public class HttpConnection  {
 	}
 	
 	public InputStream doMethod(URL url, String method, String messageBody) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine(">> HTTP " + method + " " + url);
-			if (messageBody != null) {
-				String prettyMessageBody = XMLFormatter.prettyFormat(messageBody);
-				for (String line : prettyMessageBody.split("\\n")) {
-					logger.fine(">> HTTP " + line);
-				}
-			}
-		}
-		
+		logRequest(url, method, messageBody);
 		try {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod(method);
@@ -75,36 +69,62 @@ public class HttpConnection  {
 				os.write(body);
 			}
 			int responseCode = con.getResponseCode();
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("<< HTTP Status-Code " + responseCode);
-			}
-			if (!(responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED)) {
+			logResponseCode(responseCode);
+			if (!successful(responseCode)) {
 				ByteBuffer buffer = new ByteBuffer(con.getErrorStream());
-				if (logger.isLoggable(Level.FINE)) {
-					String response = new String(buffer.getByteArray(), "utf-8");
-					String prettyMessageBody = XMLFormatter.prettyFormat(response);
-					for (String line : prettyMessageBody.split("\\n")) {
-						logger.fine("<< HTTP " + line);
-					}
-				}
-				return null;
-			}
-			if (method.equalsIgnoreCase("PUT") || method.equalsIgnoreCase("DELETE")) {
-				return null;
+				logResponse(buffer);
+				String response = buffer.getAsString("utf-8");
+				String message = DOMUtils.stripXML(response);
+				throw new ApiException(responseCode, message);
 			} else {
-				ByteBuffer buffer = new ByteBuffer(con.getInputStream());
-				if (logger.isLoggable(Level.FINE)) {
-					String response = new String(buffer.getByteArray(), "utf-8");
-					String prettyMessageBody = XMLFormatter.prettyFormat(response);
-					for (String line : prettyMessageBody.split("\\n")) {
-						logger.fine("<< HTTP " + line);
-					}
+				if (method.equalsIgnoreCase("PUT") || method.equalsIgnoreCase("DELETE")) {
+					return null;
+				} else {
+					ByteBuffer buffer = new ByteBuffer(con.getInputStream());
+					logResponse(buffer);
+					return buffer.getInputStream();
 				}
-				return buffer.getInputStream();
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public boolean successful(int responseCode) {
+		return responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED;
+	}
+	
+	private void logRequest(URL url, String method, String messageBody) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine(">> HTTP " + method + " " + url);
+			if (messageBody != null) {
+				String prettyMessageBody = XMLFormatter.prettyFormat(messageBody);
+				for (String line : prettyMessageBody.split("\\n")) {
+					logger.fine(">> HTTP " + line);
+				}
+			}
+		}
+	}
+	
+	private void logResponseCode(int statusCode) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("<< HTTP Status-Code " + statusCode);
+		}
+	}
+	
+	private void logResponse(ByteBuffer buffer) {
+		String response = buffer.getAsString("utf-8");
+		if (logger.isLoggable(Level.FINE) && !response.isEmpty()) {
+			if (DOMUtils.isXML(response)) {
+				String prettyMessageBody = XMLFormatter.prettyFormat(response);
+				for (String line : prettyMessageBody.split("\\n")) {
+					logger.fine("<< HTTP " + line);
+				}
+			} else {
+				logger.fine("<< HTTP " + response);
+			}
+		}
+	}
+	
 	
 }

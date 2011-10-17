@@ -26,6 +26,17 @@ import org.w3c.dom.NodeList;
  */
 public class DOMUtils {
 	
+    public static boolean isXML(String content) {
+    	return content != null && content.startsWith("<?xml");
+    }
+    
+    public static String stripXML(String content) {
+    	content = content.replaceAll("\\<.*?\\>", "");
+    	content = content.replaceAll("\\n", "");
+    	return content;
+    }
+
+	
 	public static Document buildDocument(InputStream in) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

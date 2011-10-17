@@ -1,8 +1,6 @@
 package org.beanstalk4j;
 
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
 import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;

@@ -22,7 +22,7 @@ import org.junit.Test;
 public class BeanstalkApiTest {
 	
 	public static final String accountName = "<your account>";
-	public static final String username = "<your username>";
+	public static final String username = "<your login>";
 	public static final String password = "<your password>";
 	
 	private BeanstalkApi api;
@@ -70,6 +70,16 @@ public class BeanstalkApiTest {
 		for (User u : users) {
 			System.out.println(u);
 		}
+	}
+	
+	@Test  @Ignore
+	public void testCreateDuplicateUser() {
+		User user = new UserBuilder()
+			.login("ilya")
+			.email("foo@example.com")
+			.firstName("Björn")
+			.lastName("Raupach").build();
+		user = api.createUser(user, "12345");
 	}
 	
 	@Test @Ignore

@@ -45,4 +45,5 @@ public class XMLFormatter {
 	        throw new RuntimeException(e);
 	    }
 	}
+	
 }
