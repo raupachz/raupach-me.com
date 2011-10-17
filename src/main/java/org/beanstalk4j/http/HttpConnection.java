@@ -7,8 +7,6 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.net.ssl.HttpsURLConnection;
-
 import org.beanstalk4j.utils.Base64Coder;
 import org.beanstalk4j.xml.XMLFormatter;
 

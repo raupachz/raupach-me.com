@@ -7,23 +7,27 @@ import java.util.List;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
 import org.beanstalk4j.model.Comment;
+import org.beanstalk4j.model.Invitation;
 import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.PublicKey;
 import org.beanstalk4j.model.Release;
 import org.beanstalk4j.model.ReleaseServer;
 import org.beanstalk4j.model.Repository;
+import org.beanstalk4j.model.RepositoryImport;
 import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.model.User;
 import org.beanstalk4j.model.builder.AccountBuilder;
 import org.beanstalk4j.model.builder.ChangesetBuilder;
 import org.beanstalk4j.model.builder.CommentBuilder;
+import org.beanstalk4j.model.builder.InvitationBuilder;
 import org.beanstalk4j.model.builder.PermissionBuilder;
 import org.beanstalk4j.model.builder.PlanBuilder;
 import org.beanstalk4j.model.builder.PublicKeyBuilder;
 import org.beanstalk4j.model.builder.ReleaseBuilder;
 import org.beanstalk4j.model.builder.ReleaseServerBuilder;
 import org.beanstalk4j.model.builder.RepositoryBuilder;
+import org.beanstalk4j.model.builder.RepositoryImportBuilder;
 import org.beanstalk4j.model.builder.ServerEnvironmentBuilder;
 import org.beanstalk4j.model.builder.UserBuilder;
 import org.beanstalk4j.xml.DOMUtils;
@@ -267,6 +271,18 @@ public class ResourceFactory {
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
 		return new ReleaseBuilder(root).build();	
+	}
+
+	public Invitation buildInvitation(InputStream httpStream) {
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		return new InvitationBuilder(root).build();
+	}
+
+	public RepositoryImport buildRepositoryImport(InputStream httpStream) {
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		return new RepositoryImportBuilder(root).build();
 	}
 
 }

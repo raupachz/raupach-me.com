@@ -1,6 +1,8 @@
 package org.beanstalk4j;
 
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -13,12 +15,14 @@ import org.beanstalk4j.logging.DefaultFormatter;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
 import org.beanstalk4j.model.Comment;
+import org.beanstalk4j.model.Invitation;
 import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.PublicKey;
 import org.beanstalk4j.model.Release;
 import org.beanstalk4j.model.ReleaseServer;
 import org.beanstalk4j.model.Repository;
+import org.beanstalk4j.model.RepositoryImport;
 import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.model.User;
 
@@ -886,6 +890,60 @@ public class BeanstalkApi {
 	public void retryFailedRelease(String repositoryName, Integer releaseId) {
 		URLBuilder url = new URLBuilder(host, "/api/" + repositoryName + "/releases/" + releaseId + "/retry.xml");
 		httpConnection.doPut(url.toURL(), null);
+	}
+	
+	/**
+	 * Find invitation
+	 * @param invitationId
+	 * @return
+	 */
+	public Invitation getInvitation(Integer invitationId) {
+		URLBuilder url = new URLBuilder(host, "/api/invitations/" + invitationId + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
+		return resourceFactory.buildInvitation(httpStream);
+	}
+	
+	/**
+	 * Create invitation
+	 * @param email
+	 * @param firstName
+	 * @param lastName
+	 * @return
+	 */
+	public Invitation createInvitation(String email, String firstName, String lastName) {
+		URLBuilder url = new URLBuilder(host, "/api/invitations.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<invitation>");
+		sb.append("<user>");
+		sb.append("<email>").append(email).append("</email>");
+		sb.append("<first-name>").append(firstName).append("</first-name>");
+		sb.append("<last-name>").append(lastName).append("</last-name>");
+		sb.append("</user>");
+		sb.append("</invitation>");
+
+		InputStream httpStream = httpConnection.doPost(url.toURL(), sb.toString());
+		return resourceFactory.buildInvitation(httpStream);
+	}
+	
+	/**
+	 * Resend invitation
+	 * @param invitationId
+	 */
+	public void resendInvitation(Integer invitationId) {
+		URLBuilder url = new URLBuilder(host, "/api/invitations/resend/" + invitationId + ".xml");
+		httpConnection.doPut(url.toURL(), null);
+	}
+	
+	/**
+	 * Find import
+	 * @param repositoryImportId
+	 * @return
+	 */
+	public RepositoryImport getRepositoryImport(Integer repositoryImportId) {
+		URLBuilder url = new URLBuilder(host, "/api/repository_imports/" + repositoryImportId + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
+		return resourceFactory.buildRepositoryImport(httpStream);
 	}
 	
 }
