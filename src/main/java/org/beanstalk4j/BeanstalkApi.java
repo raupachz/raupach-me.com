@@ -1,6 +1,7 @@
 package org.beanstalk4j;
 
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -121,11 +122,23 @@ public class BeanstalkApi {
 	}
 	
 	/**
-	 * Find all users
+	 * Find first 30 users
 	 * @return all users
 	 */
 	public List<User> getUsers() {
 		URLBuilder url = new URLBuilder(host, "/api/users.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
+		return resourceFactory.buildUsers(httpStream);
+	}
+	
+	/**
+	 * Find all users. This methods supports pagination.
+	 * @param page page number for pagination
+	 * @param perPage number of elements per page (default 30, maximum 50)
+	 * @return
+	 */
+	public List<User> getUsers(Integer page, Integer perPage) {
+		URLBuilder url = new URLBuilder(host, "/api/users.xml").addFieldValuePair("page", page).addFieldValuePair("per_page", perPage);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildUsers(httpStream);
 	}
