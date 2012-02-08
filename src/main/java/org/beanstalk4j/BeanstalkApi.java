@@ -1,6 +1,7 @@
 package org.beanstalk4j;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.logging.Handler;
@@ -218,6 +219,17 @@ public class BeanstalkApi {
 	 */
 	public List<PublicKey> getPublicKeys() {
 		URLBuilder url = new URLBuilder(host, "/api/public_keys.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
+		return resourceFactory.buildPublicKeys(httpStream);
+	}
+	
+	/**
+	 * Find all public keys of user
+	 * @param userId
+	 * @return
+	 */
+	public List<PublicKey> getPublicKeys(Integer userId) {
+		URLBuilder url = new URLBuilder(host, "/api/public_keys.xml").addFieldValuePair("user_id", userId);
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildPublicKeys(httpStream);
 	}
@@ -955,6 +967,24 @@ public class BeanstalkApi {
 	public RepositoryImport getRepositoryImport(Integer repositoryImportId) {
 		URLBuilder url = new URLBuilder(host, "/api/repository_imports/" + repositoryImportId + ".xml");
 		InputStream httpStream = httpConnection.doGet(url.toURL());
+		return resourceFactory.buildRepositoryImport(httpStream);
+	}
+	
+	/**
+	 * Create respository import
+	 * @param repositoryId
+	 * @param importUrl
+	 * @return
+	 */
+	public RepositoryImport createRepositoryImport(Integer repositoryId, URL importUrl) {
+		URLBuilder url = new URLBuilder(host, "/api/" + repositoryId + "/repository_imports.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<repository-import>");
+		sb.append("<uri>").append(importUrl.toString()).append("</uri>");
+		sb.append("</repository-import>");
+
+		InputStream httpStream = httpConnection.doPost(url.toURL(), sb.toString());
 		return resourceFactory.buildRepositoryImport(httpStream);
 	}
 	
