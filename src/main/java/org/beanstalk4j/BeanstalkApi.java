@@ -14,6 +14,7 @@ import org.beanstalk4j.logging.DefaultFormatter;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
 import org.beanstalk4j.model.Comment;
+import org.beanstalk4j.model.FeedKey;
 import org.beanstalk4j.model.Invitation;
 import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
@@ -955,6 +956,16 @@ public class BeanstalkApi {
 		URLBuilder url = new URLBuilder(host, "/api/repository_imports/" + repositoryImportId + ".xml");
 		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return resourceFactory.buildRepositoryImport(httpStream);
+	}
+	
+	/**
+	 * Find FeedKey for Current Session User
+	 * @return
+	 */
+	public FeedKey getFeedKey() {
+		URLBuilder url = new URLBuilder(host, "/api/feed_key.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
+		return resourceFactory.buildFeedKey(httpStream);
 	}
 	
 }

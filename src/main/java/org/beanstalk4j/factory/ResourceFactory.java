@@ -7,6 +7,7 @@ import java.util.List;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
 import org.beanstalk4j.model.Comment;
+import org.beanstalk4j.model.FeedKey;
 import org.beanstalk4j.model.Invitation;
 import org.beanstalk4j.model.Permission;
 import org.beanstalk4j.model.Plan;
@@ -20,6 +21,7 @@ import org.beanstalk4j.model.User;
 import org.beanstalk4j.model.builder.AccountBuilder;
 import org.beanstalk4j.model.builder.ChangesetBuilder;
 import org.beanstalk4j.model.builder.CommentBuilder;
+import org.beanstalk4j.model.builder.FeedKeyBuilder;
 import org.beanstalk4j.model.builder.InvitationBuilder;
 import org.beanstalk4j.model.builder.PermissionBuilder;
 import org.beanstalk4j.model.builder.PlanBuilder;
@@ -283,6 +285,12 @@ public class ResourceFactory {
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
 		return new RepositoryImportBuilder(root).build();
+	}
+	
+	public FeedKey buildFeedKey(InputStream httpStream) {
+		Document document = DOMUtils.buildDocument(httpStream);
+		Element root = document.getDocumentElement();
+		return new FeedKeyBuilder(root).build();
 	}
 
 }

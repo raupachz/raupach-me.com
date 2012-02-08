@@ -8,6 +8,7 @@ import java.util.List;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
 import org.beanstalk4j.model.Comment;
+import org.beanstalk4j.model.FeedKey;
 import org.beanstalk4j.model.Plan;
 import org.beanstalk4j.model.PublicKey;
 import org.beanstalk4j.model.Release;
@@ -21,9 +22,9 @@ import org.junit.Test;
 
 public class BeanstalkApiTest {
 	
-	public static final String accountName = "<your account>";
-	public static final String username = "<your login>";
-	public static final String password = "<your password>";
+	public static final String accountName = "<host>";
+	public static final String username = "<username>";
+	public static final String password = "<password>";
 	
 	private BeanstalkApi api;
 	
@@ -42,6 +43,7 @@ public class BeanstalkApiTest {
 	public void testUpdateAccountTimeZone() {
 		Account account = api.getAccount();
 		String timeZone = "Berlin";
+		account.setName("e2n");
 		account.setTimeZone(timeZone);
 		api.updateAccount(account);
 		account = api.getAccount();
@@ -59,6 +61,14 @@ public class BeanstalkApiTest {
 	@Test @Ignore
 	public void testGetUsers() {
 		List<User> users = api.getUsers();
+		for (User u : users) {
+			System.out.println(u);
+		}
+	}
+	
+	@Test @Ignore
+	public void testGetUsersWithPagination() {
+		List<User> users = api.getUsers(3,1);
 		for (User u : users) {
 			System.out.println(u);
 		}
@@ -179,6 +189,11 @@ public class BeanstalkApiTest {
 		for (Release r : api.getReleases()) {
 			System.out.println(r);
 		}
+	}
+	
+	@Test @Ignore
+	public void testGetFeedKey() {
+		FeedKey key = api.getFeedKey();
 	}
 	
 }
