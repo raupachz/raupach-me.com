@@ -1,8 +1,3 @@
-package org.beanstalk4j.model;
-
-import java.io.Serializable;
-import java.util.Date;
-
 /*
  * Copyright 2011 Björn Raupach
 
@@ -18,6 +13,11 @@ import java.util.Date;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+package org.beanstalk4j.model;
+
+import java.io.Serializable;
+import java.util.Date;
+
 public class ReleaseServer implements Serializable {
 	
 	private Integer accountId;

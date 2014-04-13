@@ -22,46 +22,46 @@ import java.io.UnsupportedEncodingException;
    limitations under the License.
  */
 class ByteBuffer {
-	
-	private final int EMPTY_RESPONSE = 1;
-	private byte[] buffer;
-	
-	public ByteBuffer(InputStream is) throws IOException {
-		if (is == null || is.available() == EMPTY_RESPONSE) {
-			buffer = new byte[0];
-		} else {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			byte[] data = new byte[4096];
 
-			for (int n; (n = is.read(data, 0, data.length)) != -1;) {
-			  out.write(data, 0, n);
-			}
-			
-			out.flush();
-			buffer = out.toByteArray();
-			out.close();
-			is.close();
-		}
-	}
-	
-	public byte[] getByteArray() {
-		return buffer;
-	}
-	
-	public String getAsString(String charsetName) {
-		if (getByteArray().length == 0) {
-			return "";
-		} else {
-			try {
-				return new String(getByteArray(), charsetName);
-			} catch (UnsupportedEncodingException e) {
-				throw new RuntimeException(e);
-			}
-		}
-	}
-	
-	public InputStream getInputStream() {
-		return new ByteArrayInputStream(buffer);
-	}
+    private final int EMPTY_RESPONSE = 1;
+    private byte[] buffer;
+
+    public ByteBuffer(InputStream is) throws IOException {
+        if (is == null || is.available() == EMPTY_RESPONSE) {
+            buffer = new byte[0];
+        } else {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] data = new byte[4096];
+
+            for (int n; (n = is.read(data, 0, data.length)) != -1;) {
+                out.write(data, 0, n);
+            }
+
+            out.flush();
+            buffer = out.toByteArray();
+            out.close();
+            is.close();
+        }
+    }
+
+    public byte[] getByteArray() {
+        return buffer;
+    }
+
+    public String getAsString(String charsetName) {
+        if (getByteArray().length == 0) {
+            return "";
+        } else {
+            try {
+                return new String(getByteArray(), charsetName);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public InputStream getInputStream() {
+        return new ByteArrayInputStream(buffer);
+    }
 
 }

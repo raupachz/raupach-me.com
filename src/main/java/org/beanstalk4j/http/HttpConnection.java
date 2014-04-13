@@ -34,8 +34,8 @@ public class HttpConnection  {
 	
 	private final String credentials;
 
-	public HttpConnection(String username, String password) {
-		this.credentials = Base64Coder.encodeString(username + ":" + password);
+	public HttpConnection(String username, String accessToken) {
+		this.credentials = Base64Coder.encodeString(username + ":" + accessToken);
 	}
 
 	public InputStream doGet(URL url) {
