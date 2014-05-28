@@ -1,12 +1,10 @@
 package org.beanstalk4j;
 
-import static org.junit.Assert.assertNotNull;
-
 import java.io.IOException;
 import java.util.List;
-
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
+import org.beanstalk4j.model.ColorLabel;
 import org.beanstalk4j.model.Comment;
 import org.beanstalk4j.model.FeedKey;
 import org.beanstalk4j.model.Plan;
@@ -16,6 +14,8 @@ import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.model.User;
 import org.beanstalk4j.model.builder.UserBuilder;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
