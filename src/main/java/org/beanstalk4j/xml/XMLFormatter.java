@@ -2,7 +2,6 @@ package org.beanstalk4j.xml;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;

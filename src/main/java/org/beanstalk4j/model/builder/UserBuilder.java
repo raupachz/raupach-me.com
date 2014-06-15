@@ -1,7 +1,6 @@
 package org.beanstalk4j.model.builder;
 
 import java.util.Date;
-
 import org.beanstalk4j.model.User;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
 import org.beanstalk4j.xml.DOMUtils;

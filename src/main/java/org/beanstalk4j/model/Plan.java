@@ -1,7 +1,6 @@
 package org.beanstalk4j.model;
 
 import java.io.Serializable;
-
 import org.beanstalk4j.utils.ToStringBuilder;
 
 /*

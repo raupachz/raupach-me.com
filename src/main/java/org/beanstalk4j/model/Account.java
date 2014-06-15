@@ -2,7 +2,6 @@ package org.beanstalk4j.model;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import org.beanstalk4j.utils.ToStringBuilder;
 
 public class Account implements Serializable {

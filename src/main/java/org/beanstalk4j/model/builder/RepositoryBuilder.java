@@ -1,7 +1,6 @@
 package org.beanstalk4j.model.builder;
 
 import java.util.Date;
-
 import org.beanstalk4j.model.ColorLabel;
 import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.utils.IsoDateTimeFormat;

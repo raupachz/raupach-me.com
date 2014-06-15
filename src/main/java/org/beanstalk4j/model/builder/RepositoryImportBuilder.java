@@ -3,7 +3,6 @@ package org.beanstalk4j.model.builder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
-
 import org.beanstalk4j.model.RepositoryImport;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
 import org.beanstalk4j.xml.DOMUtils;

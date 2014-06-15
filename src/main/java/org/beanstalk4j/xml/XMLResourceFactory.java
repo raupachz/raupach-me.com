@@ -1,9 +1,9 @@
 package org.beanstalk4j.xml;
 
+import org.beanstalk4j.ResourceFactory;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
 import org.beanstalk4j.model.Comment;
@@ -32,7 +32,6 @@ import org.beanstalk4j.model.builder.RepositoryBuilder;
 import org.beanstalk4j.model.builder.RepositoryImportBuilder;
 import org.beanstalk4j.model.builder.ServerEnvironmentBuilder;
 import org.beanstalk4j.model.builder.UserBuilder;
-import org.beanstalk4j.xml.DOMUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -53,14 +52,17 @@ import org.w3c.dom.NodeList;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-public class XMLResourceFactory {
+@Deprecated
+public class XMLResourceFactory implements ResourceFactory {
 
+    @Override
     public Account buildAccount(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element root = document.getDocumentElement();
         return new AccountBuilder(root).build();
     }
 
+    @Override
     public List<Plan> buildPlans(InputStream httpStream) {
         List<Plan> resultList = new ArrayList<Plan>();
         Document document = DOMUtils.buildDocument(httpStream);
@@ -77,6 +79,7 @@ public class XMLResourceFactory {
         return resultList;
     }
 
+    @Override
     public List<User> buildUsers(InputStream httpStream) {
         List<User> resultList = new ArrayList<User>();
         Document document = DOMUtils.buildDocument(httpStream);
@@ -93,12 +96,14 @@ public class XMLResourceFactory {
         return resultList;
     }
 
+    @Override
     public User buildUser(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element account = document.getDocumentElement();
         return new UserBuilder(account).build();
     }
 
+    @Override
     public List<PublicKey> buildPublicKeys(InputStream httpStream) {
         List<PublicKey> resultList = new ArrayList<PublicKey>();
         Document document = DOMUtils.buildDocument(httpStream);
@@ -115,12 +120,14 @@ public class XMLResourceFactory {
         return resultList;
     }
 
+    @Override
     public PublicKey buildPublicKey(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element account = document.getDocumentElement();
         return new PublicKeyBuilder(account).build();
     }
 
+    @Override
     public List<Repository> buildRepositories(InputStream httpStream) {
         List<Repository> resultList = new ArrayList<Repository>();
         Document document = DOMUtils.buildDocument(httpStream);
@@ -137,12 +144,14 @@ public class XMLResourceFactory {
         return resultList;
     }
 
+    @Override
     public Repository buildRepository(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element root = document.getDocumentElement();
         return new RepositoryBuilder(root).build();
     }
 
+    @Override
     public List<Permission> buildPermissions(InputStream httpStream) {
         List<Permission> resultList = new ArrayList<Permission>();
         Document document = DOMUtils.buildDocument(httpStream);
@@ -159,6 +168,7 @@ public class XMLResourceFactory {
         return resultList;
     }
 
+    @Override
     public List<Changeset> buildChangesets(InputStream httpStream) {
         List<Changeset> resultList = new ArrayList<Changeset>();
         Document document = DOMUtils.buildDocument(httpStream);
@@ -175,12 +185,14 @@ public class XMLResourceFactory {
         return resultList;
     }
 
+    @Override
     public Changeset buildChangeset(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element root = document.getDocumentElement();
         return new ChangesetBuilder(root).build();
     }
 
+    @Override
     public List<Comment> buildComments(InputStream httpStream) {
         List<Comment> resultList = new ArrayList<Comment>();
         Document document = DOMUtils.buildDocument(httpStream);
@@ -197,6 +209,7 @@ public class XMLResourceFactory {
         return resultList;
     }
 
+    @Override
     public List<ServerEnvironment> buildServerEnvironments(InputStream httpStream) {
         List<ServerEnvironment> resultList = new ArrayList<ServerEnvironment>();
         Document document = DOMUtils.buildDocument(httpStream);
@@ -213,24 +226,28 @@ public class XMLResourceFactory {
         return resultList;
     }
 
+    @Override
     public ServerEnvironment buildServerEnvironment(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element root = document.getDocumentElement();
         return new ServerEnvironmentBuilder(root).build();
     }
 
+    @Override
     public Permission buildPermission(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element root = document.getDocumentElement();
         return new PermissionBuilder(root).build();
     }
 
+    @Override
     public Comment buildComment(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element root = document.getDocumentElement();
         return new CommentBuilder(root).build();
     }
 
+    @Override
     public List<ReleaseServer> buildReleaseServers(InputStream httpStream) {
         List<ReleaseServer> resultList = new ArrayList<ReleaseServer>();
         Document document = DOMUtils.buildDocument(httpStream);
@@ -247,12 +264,14 @@ public class XMLResourceFactory {
         return resultList;
     }
 
+    @Override
     public ReleaseServer buildReleaseServer(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element root = document.getDocumentElement();
         return new ReleaseServerBuilder(root).build();
     }
 
+    @Override
     public List<Release> buildReleases(InputStream httpStream) {
         List<Release> resultList = new ArrayList<Release>();
         Document document = DOMUtils.buildDocument(httpStream);
@@ -269,24 +288,28 @@ public class XMLResourceFactory {
         return resultList;
     }
 
+    @Override
     public Release buildRelease(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element root = document.getDocumentElement();
         return new ReleaseBuilder(root).build();
     }
 
+    @Override
     public Invitation buildInvitation(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element root = document.getDocumentElement();
         return new InvitationBuilder(root).build();
     }
 
+    @Override
     public RepositoryImport buildRepositoryImport(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element root = document.getDocumentElement();
         return new RepositoryImportBuilder(root).build();
     }
 
+    @Override
     public FeedKey buildFeedKey(InputStream httpStream) {
         Document document = DOMUtils.buildDocument(httpStream);
         Element root = document.getDocumentElement();

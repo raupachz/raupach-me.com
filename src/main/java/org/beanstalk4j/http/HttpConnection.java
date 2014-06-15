@@ -22,7 +22,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.beanstalk4j.ApiException;
 import org.beanstalk4j.utils.Base64Coder;
 import org.beanstalk4j.xml.DOMUtils;

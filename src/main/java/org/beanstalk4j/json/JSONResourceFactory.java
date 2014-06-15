@@ -18,6 +18,7 @@ package org.beanstalk4j.json;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import org.beanstalk4j.ResourceFactory;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
@@ -33,6 +34,7 @@ import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.RepositoryImport;
 import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.model.User;
+import org.beanstalk4j.model.builder.AccountBuilder;
 
 /**
  *
@@ -42,7 +44,9 @@ public class JSONResourceFactory implements ResourceFactory {
 
     @Override
     public Account buildAccount(InputStream httpStream) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        JSON json = new JSON(httpStream);
+        Map<String,Object> obj = (Map<String,Object>) json.parse();
+        return new AccountBuilder(obj).build();
     }
 
     @Override

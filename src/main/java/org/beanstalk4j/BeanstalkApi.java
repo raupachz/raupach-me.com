@@ -15,20 +15,19 @@
  */
 package org.beanstalk4j;
 
-import org.beanstalk4j.model.ColorLabel;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.beanstalk4j.xml.XMLResourceFactory;
 import org.beanstalk4j.http.HttpConnection;
 import org.beanstalk4j.http.URLBuilder;
+import org.beanstalk4j.json.JSONResourceFactory;
 import org.beanstalk4j.logging.DefaultFormatter;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.model.Changeset;
+import org.beanstalk4j.model.ColorLabel;
 import org.beanstalk4j.model.Comment;
 import org.beanstalk4j.model.FeedKey;
 import org.beanstalk4j.model.Invitation;
@@ -41,6 +40,8 @@ import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.RepositoryImport;
 import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.model.User;
+import org.beanstalk4j.xml.XMLResourceFactory;
+import static org.beanstalk4j.Constants.*;
 
 public class BeanstalkApi {
 
@@ -48,7 +49,8 @@ public class BeanstalkApi {
 
     private final String host;
     private final HttpConnection httpConnection;
-    private final XMLResourceFactory resourceFactory;
+    private final ResourceFactory resourceFactory;
+    private final boolean xml;
 
     /**
      * Constructor.
@@ -58,9 +60,7 @@ public class BeanstalkApi {
      * @param accessToken (required)
      */
     public BeanstalkApi(String accountName, String username, String accessToken) {
-        this.host = accountName + ".beanstalkapp.com";
-        this.httpConnection = new HttpConnection(username, accessToken);
-        this.resourceFactory = new XMLResourceFactory();
+        this(accountName, username, accessToken, false, false);
     }
 
     /**
@@ -70,11 +70,17 @@ public class BeanstalkApi {
      * @param username (required)
      * @param password (required)
      * @param debug
+     * @param xml
      */
-    public BeanstalkApi(String accountName, String username, String password, boolean debug) {
+    public BeanstalkApi(String accountName, String username, String accessToken, boolean debug, boolean xml) {
         this.host = accountName + ".beanstalkapp.com";
-        this.httpConnection = new HttpConnection(username, password);
-        this.resourceFactory = new XMLResourceFactory();
+        this.httpConnection = new HttpConnection(username, accessToken);
+        this.xml = xml;
+        if (xml) {
+            this.resourceFactory = new XMLResourceFactory();
+        } else {
+            this.resourceFactory = new JSONResourceFactory();
+        }
         if (debug) {
             initializeLogging();
         }
@@ -95,7 +101,7 @@ public class BeanstalkApi {
      * @return account details
      */
     public Account getAccount() {
-        URLBuilder url = new URLBuilder(host, "/api/account.xml");
+        URLBuilder url = new URLBuilder(host, xml ? account_xml : account_json);
         InputStream httpStream = httpConnection.doGet(url.toURL());
         return resourceFactory.buildAccount(httpStream);
     }
