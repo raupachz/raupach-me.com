@@ -40,8 +40,6 @@ import org.beanstalk4j.model.Repository;
 import org.beanstalk4j.model.RepositoryImport;
 import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.model.User;
-import org.beanstalk4j.xml.XMLResourceFactory;
-import static org.beanstalk4j.Constants.*;
 
 public class BeanstalkApi {
 
@@ -50,7 +48,6 @@ public class BeanstalkApi {
     private final String host;
     private final HttpConnection httpConnection;
     private final ResourceFactory resourceFactory;
-    private final boolean xml;
 
     /**
      * Constructor.
@@ -60,7 +57,7 @@ public class BeanstalkApi {
      * @param accessToken (required)
      */
     public BeanstalkApi(String accountName, String username, String accessToken) {
-        this(accountName, username, accessToken, false, false);
+        this(accountName, username, accessToken, false);
     }
 
     /**
@@ -72,15 +69,10 @@ public class BeanstalkApi {
      * @param debug
      * @param xml
      */
-    public BeanstalkApi(String accountName, String username, String accessToken, boolean debug, boolean xml) {
+    public BeanstalkApi(String accountName, String username, String accessToken, boolean debug) {
         this.host = accountName + ".beanstalkapp.com";
         this.httpConnection = new HttpConnection(username, accessToken);
-        this.xml = xml;
-        if (xml) {
-            this.resourceFactory = new XMLResourceFactory();
-        } else {
-            this.resourceFactory = new JSONResourceFactory();
-        }
+        this.resourceFactory = new JSONResourceFactory();
         if (debug) {
             initializeLogging();
         }
@@ -101,7 +93,7 @@ public class BeanstalkApi {
      * @return account details
      */
     public Account getAccount() {
-        URLBuilder url = new URLBuilder(host, xml ? account_xml : account_json);
+        URLBuilder url = new URLBuilder(host, Constants.account);
         InputStream httpStream = httpConnection.doGet(url.toURL());
         return resourceFactory.buildAccount(httpStream);
     }
@@ -112,11 +104,11 @@ public class BeanstalkApi {
      * @param account
      */
     public void updateAccount(Account account) {
-        URLBuilder url = new URLBuilder(host, "/api/account.xml");
+        URLBuilder url = new URLBuilder(host, Constants.account);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("<account>");
-        sb.append("<name>").append(account.getName()).append("</name>");
+        sb.append("{");
+        sb.append("\"name\"").append(account.getName()).append("</name>");
         sb.append("<time-zone>").append(account.getTimeZone()).append("</time-zone>");
         sb.append("</account>");
 

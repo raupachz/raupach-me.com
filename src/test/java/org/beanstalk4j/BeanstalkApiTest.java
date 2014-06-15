@@ -44,7 +44,7 @@ public class BeanstalkApiTest {
 
     @Before
     public void setUp() throws IOException {
-        api = new BeanstalkApi(accountName, username, accessToken, true, false);
+        api = new BeanstalkApi(accountName, username, accessToken, true);
     }
 
     @Test

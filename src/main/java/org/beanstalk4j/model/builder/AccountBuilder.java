@@ -19,8 +19,6 @@ import java.util.Date;
 import java.util.Map;
 import org.beanstalk4j.model.Account;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
-import org.beanstalk4j.xml.DOMUtils;
-import org.w3c.dom.Element;
 
 public class AccountBuilder {
 
@@ -28,19 +26,6 @@ public class AccountBuilder {
 
     public AccountBuilder() {
         account = new Account();
-    }
-
-    public AccountBuilder(Element element) {
-        this();
-        id(DOMUtils.getChildText(element, "id"));
-        ownerId(DOMUtils.getChildText(element, "owner-id"));
-        planId(DOMUtils.getChildText(element, "plan-id"));
-        name(DOMUtils.getChildText(element, "name"));
-        thirdLevelDomain(DOMUtils.getChildText(element, "third-level-domain"));
-        timeZone(DOMUtils.getChildText(element, "time-zone"));
-        suspended(DOMUtils.getChildText(element, "suspended"));
-        createdAt(DOMUtils.getChildText(element, "created-at"));
-        updatedAt(DOMUtils.getChildText(element, "updated-at"));
     }
 
     public AccountBuilder(Map<String, Object> map) {

@@ -18,131 +18,111 @@ package org.beanstalk4j.model.builder;
 import java.util.Date;
 import org.beanstalk4j.model.Comment;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
-import org.beanstalk4j.xml.DOMUtils;
-import org.w3c.dom.Element;
 
 public class CommentBuilder {
-	
-	private final Comment comment;
 
-	public CommentBuilder() {
-		this.comment = new Comment();
-	}
-	
-	public CommentBuilder(Element element) {
-		this();
-		id(DOMUtils.getChildText(element,"id"));
-		accountId(DOMUtils.getChildText(element,"account-id"));
-		authorId(DOMUtils.getChildText(element,"author-id"));
-		authorName(DOMUtils.getChildText(element,"author-name"));
-		authorLogin(DOMUtils.getChildText(element,"author-login"));
-		authorEmail(DOMUtils.getChildText(element,"author-email"));
-		body(DOMUtils.getChildText(element,"body"));
-		createdAt(DOMUtils.getChildText(element,"created-at"));
-		filePath(DOMUtils.getChildText(element,"file-path"));
-		lineNumber(DOMUtils.getChildText(element,"line-number"));
-		renderedBody(DOMUtils.getChildText(element,"rendered-body"));
-		repositoryId(DOMUtils.getChildText(element,"repository-id"));
-		revision(DOMUtils.getChildText(element,"revision"));
-		updatedAt(DOMUtils.getChildText(element,"updated-at"));
-	}
-	
-	public CommentBuilder id(Integer id) {
-		comment.setId(id);
-		return this;
-	}
-	
-	public CommentBuilder id(String id) {
-		return id(Integer.valueOf(id));
-	}
-	
-	public CommentBuilder accountId(Integer accountId) {
-		comment.setAccountId(accountId);
-		return this;
-	}
-	
-	public CommentBuilder accountId(String accountId) {
-		return accountId(Integer.valueOf(accountId));
-	}
-	
-	public CommentBuilder authorId(Integer authorId) {
-		comment.setAuthorId(authorId);
-		return this;
-	}
-	
-	public CommentBuilder authorId(String authorId) {
-		return authorId(Integer.valueOf(authorId));
-	}
-	
-	public CommentBuilder authorName(String authorName) {
-		comment.setAuthorName(authorName);
-		return this;
-	}
-	
-	public CommentBuilder authorLogin(String authorLogin) {
-		comment.setAuthorLogin(authorLogin);
-		return this;
-	}
-	
-	public CommentBuilder authorEmail(String authorEmail) {
-		comment.setAuthorEmail(authorEmail);
-		return this;
-	}
-	
-	public CommentBuilder body(String body) {
-		comment.setBody(body);
-		return this;
-	}
-	
-	public CommentBuilder createdAt(Date createdAt) {
-		comment.setCreatedAt(createdAt);
-		return this;
-	}
-	
-	public CommentBuilder createdAt(String createdAt) {
-		return createdAt(IsoDateTimeFormat.parse(createdAt));
-	}
-	
-	public CommentBuilder filePath(String filePath) {
-		comment.setFilePath(filePath);
-		return this;
-	}
-	
-	public CommentBuilder lineNumber(String lineNumber) {
-		comment.setLineNumber(lineNumber);
-		return this;
-	}
-	
-	public CommentBuilder renderedBody(String renderedBody) {
-		comment.setRenderedBody(renderedBody);
-		return this;
-	}
-	
-	public CommentBuilder repositoryId(Integer repositoryId) {
-		comment.setRepositoryId(repositoryId);
-		return this;
-	}
-	
-	public CommentBuilder repositoryId(String repositoryId) {
-		return repositoryId(Integer.valueOf(repositoryId));
-	}
-	
-	public CommentBuilder revision(String revision) {
-		comment.setRevision(revision);
-		return this;
-	}
-	
-	public CommentBuilder updatedAt(Date updatedAt) {
-		comment.setUpdatedAt(updatedAt);
-		return this;
-	}
-	
-	public CommentBuilder updatedAt(String updatedAt) {
-		return updatedAt(IsoDateTimeFormat.parse(updatedAt));
-	}
-	
-	public Comment build() {
-		return comment;
-	}
-	
+    private final Comment comment;
+
+    public CommentBuilder() {
+        this.comment = new Comment();
+    }
+
+    public CommentBuilder id(Integer id) {
+        comment.setId(id);
+        return this;
+    }
+
+    public CommentBuilder id(String id) {
+        return id(Integer.valueOf(id));
+    }
+
+    public CommentBuilder accountId(Integer accountId) {
+        comment.setAccountId(accountId);
+        return this;
+    }
+
+    public CommentBuilder accountId(String accountId) {
+        return accountId(Integer.valueOf(accountId));
+    }
+
+    public CommentBuilder authorId(Integer authorId) {
+        comment.setAuthorId(authorId);
+        return this;
+    }
+
+    public CommentBuilder authorId(String authorId) {
+        return authorId(Integer.valueOf(authorId));
+    }
+
+    public CommentBuilder authorName(String authorName) {
+        comment.setAuthorName(authorName);
+        return this;
+    }
+
+    public CommentBuilder authorLogin(String authorLogin) {
+        comment.setAuthorLogin(authorLogin);
+        return this;
+    }
+
+    public CommentBuilder authorEmail(String authorEmail) {
+        comment.setAuthorEmail(authorEmail);
+        return this;
+    }
+
+    public CommentBuilder body(String body) {
+        comment.setBody(body);
+        return this;
+    }
+
+    public CommentBuilder createdAt(Date createdAt) {
+        comment.setCreatedAt(createdAt);
+        return this;
+    }
+
+    public CommentBuilder createdAt(String createdAt) {
+        return createdAt(IsoDateTimeFormat.parse(createdAt));
+    }
+
+    public CommentBuilder filePath(String filePath) {
+        comment.setFilePath(filePath);
+        return this;
+    }
+
+    public CommentBuilder lineNumber(String lineNumber) {
+        comment.setLineNumber(lineNumber);
+        return this;
+    }
+
+    public CommentBuilder renderedBody(String renderedBody) {
+        comment.setRenderedBody(renderedBody);
+        return this;
+    }
+
+    public CommentBuilder repositoryId(Integer repositoryId) {
+        comment.setRepositoryId(repositoryId);
+        return this;
+    }
+
+    public CommentBuilder repositoryId(String repositoryId) {
+        return repositoryId(Integer.valueOf(repositoryId));
+    }
+
+    public CommentBuilder revision(String revision) {
+        comment.setRevision(revision);
+        return this;
+    }
+
+    public CommentBuilder updatedAt(Date updatedAt) {
+        comment.setUpdatedAt(updatedAt);
+        return this;
+    }
+
+    public CommentBuilder updatedAt(String updatedAt) {
+        return updatedAt(IsoDateTimeFormat.parse(updatedAt));
+    }
+
+    public Comment build() {
+        return comment;
+    }
+
 }

@@ -1,119 +1,103 @@
+/*
+ * Copyright 2011 Björn Raupach
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.beanstalk4j.model.builder;
 
 import java.util.Date;
 import org.beanstalk4j.model.ServerEnvironment;
 import org.beanstalk4j.utils.IsoDateTimeFormat;
-import org.beanstalk4j.xml.DOMUtils;
-import org.w3c.dom.Element;
 
-/*
- * Copyright 2011 Björn Raupach
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
- */
 public class ServerEnvironmentBuilder {
-	
-	private final ServerEnvironment serverEnvironment;
-	
-	public ServerEnvironmentBuilder() {
-		this.serverEnvironment = new ServerEnvironment();
-	}
-	
-	public ServerEnvironmentBuilder(Element element) {
-		this();
-		accountId(DOMUtils.getChildText(element,"account-id"));
-		automatic(DOMUtils.getChildText(element,"automatic"));
-		branchName(DOMUtils.getChildText(element,"branch-name"));
-		createdAt(DOMUtils.getChildText(element,"created-at"));
-		currentVersion(DOMUtils.getChildText(element,"current-version"));
-		id(DOMUtils.getChildText(element,"id"));
-		name(DOMUtils.getChildText(element,"name"));
-		repositoryId(DOMUtils.getChildText(element,"repository-id"));
-		updatedAt(DOMUtils.getChildText(element,"updated-at"));
-	}
-	
-	public ServerEnvironmentBuilder accountId(Integer accountId) {
-		serverEnvironment.setAccountId(accountId);
-		return this;
-	}
-	
-	public ServerEnvironmentBuilder accountId(String accountId) {
-		return accountId(Integer.valueOf(accountId));
-	}
-	
-	public ServerEnvironmentBuilder automatic(Boolean automatic) {
-		serverEnvironment.setAutomatic(automatic);
-		return this;
-	}
-	
-	public ServerEnvironmentBuilder automatic(String automatic) {
-		return automatic(Boolean.valueOf(automatic));
-	}
-	
-	public ServerEnvironmentBuilder branchName(String branchName) {
-		serverEnvironment.setBranchName(branchName);
-		return this;
-	}
-	
-	public ServerEnvironmentBuilder createdAt(Date createdAt) {
-		serverEnvironment.setCreatedAt(createdAt);
-		return this;
-	}
-	
-	public ServerEnvironmentBuilder createdAt(String createdAt) {
-		return createdAt(createdAt);
-	}
-	
-	public ServerEnvironmentBuilder currentVersion(String currentVersion) {
-		serverEnvironment.setCurrentVersion(currentVersion);
-		return this;
-	}
-	
-	public ServerEnvironmentBuilder id(Integer id) {
-		serverEnvironment.setId(id);
-		return this;
-	}
-	
-	public ServerEnvironmentBuilder id(String id) {
-		return id(Integer.valueOf(id));
-	}
-	
-	public ServerEnvironmentBuilder name(String name) {
-		serverEnvironment.setName(name);
-		return this;
-	}
-	
-	public ServerEnvironmentBuilder repositoryId(Integer repositoryId) {
-		serverEnvironment.setRepositoryId(repositoryId);
-		return this;
-	}
-	
-	public ServerEnvironmentBuilder repositoryId(String repositoryId) {
-		return repositoryId(Integer.valueOf(repositoryId));
-	}
-	
-	public ServerEnvironmentBuilder updatedAt(Date updatedAt) {
-		serverEnvironment.setUpdatedAt(updatedAt);
-		return this;
-	}
-	
-	public ServerEnvironmentBuilder updatedAt(String updatedAt) {
-		return updatedAt(IsoDateTimeFormat.parse(updatedAt));
-	}
-	
-	public ServerEnvironment build() {
-		return serverEnvironment;
-	}
-	
+
+    private final ServerEnvironment serverEnvironment;
+
+    public ServerEnvironmentBuilder() {
+        this.serverEnvironment = new ServerEnvironment();
+    }
+
+    public ServerEnvironmentBuilder accountId(Integer accountId) {
+        serverEnvironment.setAccountId(accountId);
+        return this;
+    }
+
+    public ServerEnvironmentBuilder accountId(String accountId) {
+        return accountId(Integer.valueOf(accountId));
+    }
+
+    public ServerEnvironmentBuilder automatic(Boolean automatic) {
+        serverEnvironment.setAutomatic(automatic);
+        return this;
+    }
+
+    public ServerEnvironmentBuilder automatic(String automatic) {
+        return automatic(Boolean.valueOf(automatic));
+    }
+
+    public ServerEnvironmentBuilder branchName(String branchName) {
+        serverEnvironment.setBranchName(branchName);
+        return this;
+    }
+
+    public ServerEnvironmentBuilder createdAt(Date createdAt) {
+        serverEnvironment.setCreatedAt(createdAt);
+        return this;
+    }
+
+    public ServerEnvironmentBuilder createdAt(String createdAt) {
+        return createdAt(createdAt);
+    }
+
+    public ServerEnvironmentBuilder currentVersion(String currentVersion) {
+        serverEnvironment.setCurrentVersion(currentVersion);
+        return this;
+    }
+
+    public ServerEnvironmentBuilder id(Integer id) {
+        serverEnvironment.setId(id);
+        return this;
+    }
+
+    public ServerEnvironmentBuilder id(String id) {
+        return id(Integer.valueOf(id));
+    }
+
+    public ServerEnvironmentBuilder name(String name) {
+        serverEnvironment.setName(name);
+        return this;
+    }
+
+    public ServerEnvironmentBuilder repositoryId(Integer repositoryId) {
+        serverEnvironment.setRepositoryId(repositoryId);
+        return this;
+    }
+
+    public ServerEnvironmentBuilder repositoryId(String repositoryId) {
+        return repositoryId(Integer.valueOf(repositoryId));
+    }
+
+    public ServerEnvironmentBuilder updatedAt(Date updatedAt) {
+        serverEnvironment.setUpdatedAt(updatedAt);
+        return this;
+    }
+
+    public ServerEnvironmentBuilder updatedAt(String updatedAt) {
+        return updatedAt(IsoDateTimeFormat.parse(updatedAt));
+    }
+
+    public ServerEnvironment build() {
+        return serverEnvironment;
+    }
 
 }

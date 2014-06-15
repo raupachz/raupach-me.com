@@ -18,9 +18,7 @@ package org.beanstalk4j;
 
 public interface Constants {
     
-    public static final String account_xml = "/api/account.xml";
-    
-    public static final String account_json = "/api/account.json";
+    public static final String account = "/api/account.json";
     
     
 }
