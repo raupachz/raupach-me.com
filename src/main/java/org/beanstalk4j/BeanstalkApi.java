@@ -93,7 +93,7 @@ public class BeanstalkApi {
      * @return account details
      */
     public Account getAccount() {
-        URLBuilder url = new URLBuilder(host, Constants.account);
+        URLBuilder url = new URLBuilder(host, Endpoints.account);
         InputStream httpStream = httpConnection.doGet(url.toURL());
         return resourceFactory.buildAccount(httpStream);
     }
@@ -104,7 +104,7 @@ public class BeanstalkApi {
      * @param account
      */
     public void updateAccount(Account account) {
-        URLBuilder url = new URLBuilder(host, Constants.account);
+        URLBuilder url = new URLBuilder(host, Endpoints.account);
 
         StringBuilder sb = new StringBuilder();
         sb.append("{");
